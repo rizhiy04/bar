@@ -189,6 +189,14 @@ Request:
 
 `POST /bar/addNewEntertainment`
 
+```json
+{
+   "eventName" : "StandUp вечер",
+   "description" : "Много известных комиков",
+   "date" : "14.03.2020" 
+}
+```
+
 Response: `200 OK`
 
 ### B-11 Как "Администратор" я хочу добавлять новые позиции в меню
