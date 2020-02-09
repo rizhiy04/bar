@@ -158,7 +158,7 @@ Request:
 ```json
 {
   "name" : "Денис",
-  "time" : "04.03.2020 19:00"
+  "time" : "04-03-2020 19:00"
 }
 ```
 
@@ -184,7 +184,7 @@ Response: `200 OK`
     "id" : 1,
     "eventName" : "StandUp вечер",
     "description" : "Много известных комиков",
-    "date" : "04.03.2020" 
+    "date" : "04-03-2020 20:00" 
   }
 ]
 ```
@@ -203,7 +203,7 @@ Response: `200 OK`
   {
     "id" : 1,
     "clientName" : "Денис",
-    "reserveTime" : "04.03.2020 19:00",
+    "reserveTime" : "04-03-2020 19:00",
     "tableNumber" : 2
   }
 ]
@@ -357,7 +357,7 @@ Request:
 {
    "eventName" : "StandUp вечер",
    "description" : "Много известных комиков",
-   "date" : "14.03.2020" 
+   "date" : "14-03-2020 20:00" 
 }
 ```
 
