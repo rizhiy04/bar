@@ -1,11 +1,11 @@
 package com.example.Bar.service;
 
 import com.example.Bar.dto.*;
-import com.example.Bar.dto.eventDTO.AddNewEventRequestDTO;
-import com.example.Bar.dto.inventoryDTO.AddNewInventoryRequestDTO;
-import com.example.Bar.dto.inventoryDTO.ChangeInventoryCountRequestDTO;
-import com.example.Bar.dto.inventoryDTO.InventoryDTO;
-import com.example.Bar.dto.menuItemDTO.AddNewMenuItemRequestDTO;
+import com.example.Bar.dto.event.AddNewEventRequestDTO;
+import com.example.Bar.dto.inventory.AddNewInventoryRequestDTO;
+import com.example.Bar.dto.inventory.ChangeInventoryCountRequestDTO;
+import com.example.Bar.dto.inventory.InventoryDTO;
+import com.example.Bar.dto.menuItem.AddNewMenuItemRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -18,31 +18,31 @@ public class AdminService {
         return Collections.singletonList(new InventoryDTO(1, "Рюмка 50 мл", "glass", 23));
     }
 
-    public TextResponse changeInventoryCount(ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO){
+    public TextResponse changeInventoryCount(final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO){
         return new TextResponse("Сохранено");
     }
 
-    public TextResponse addNewInventory(AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+    public TextResponse addNewInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
         return new TextResponse("Инвентарь добавлен");
     }
 
-    public TextResponse deleteInventory(Integer inventoryId){
+    public TextResponse deleteInventory(final Integer inventoryId){
         return new TextResponse("Инвентарь удален");
     }
 
-    public TextResponse addNewEvent(AddNewEventRequestDTO addNewEventRequestDTO){
+    public TextResponse addNewEvent(final AddNewEventRequestDTO addNewEventRequestDTO){
         return new TextResponse("Мероприятие добавлено");
     }
 
-    public TextResponse deleteEvent(Integer eventId){
+    public TextResponse deleteEvent(final Integer eventId){
         return new TextResponse("Мероприятие удалено");
     }
 
-    public TextResponse addNewMenuItem(AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
+    public TextResponse addNewMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
         return new TextResponse("Позиция добавлена");
     }
 
-    public TextResponse deleteMenuItem(Integer productId){
+    public TextResponse deleteMenuItem(final Integer productId){
         return new TextResponse("Позиция удалена");
     }
 

@@ -1,4 +1,4 @@
-package com.example.Bar.dto.reservationDTO;
+package com.example.Bar.dto.reservation;
 
 import lombok.Data;
 

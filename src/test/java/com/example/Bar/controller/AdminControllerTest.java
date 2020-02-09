@@ -79,7 +79,7 @@ class AdminControllerTest {
                         .content("{\n" +
                                 "  \"eventName\" : \"StandUp вечер\",\n" +
                                 "  \"description\" : \"Много известных комиков\",\n" +
-                                "  \"date\" : \"14.03.2020\"\n" +
+                                "  \"date\" : \"14-03-2020 20:00\"\n" +
                                 "}"))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{\n" +

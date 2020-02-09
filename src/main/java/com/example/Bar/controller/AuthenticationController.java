@@ -1,7 +1,7 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.authenticationDTO.SignInRequestDTO;
-import com.example.Bar.dto.authenticationDTO.SignUpRequestDTO;
+import com.example.Bar.dto.authentication.SignInRequestDTO;
+import com.example.Bar.dto.authentication.SignUpRequestDTO;
 import com.example.Bar.service.AuthenticationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,13 +16,13 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody SignUpRequestDTO signUpRequestDTO){
+    public void signUp(@RequestBody final SignUpRequestDTO signUpRequestDTO){
         authenticationService.signUp(signUpRequestDTO);
     }
 
     @PostMapping("/sign-in")
     @ResponseStatus(HttpStatus.OK)
-    public String signIn(@RequestBody SignInRequestDTO signInRequestDTO){
+    public String signIn(@RequestBody final SignInRequestDTO signInRequestDTO){
         return authenticationService.signIn(signInRequestDTO);
     }
 }

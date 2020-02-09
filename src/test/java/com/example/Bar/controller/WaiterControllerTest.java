@@ -27,7 +27,7 @@ class WaiterControllerTest {
                         "{\n" +
                         "  \"id\" : 1,\n" +
                         "  \"clientName\" : \"Денис\",\n" +
-                        "  \"reserveTime\" : \"04.03.2020 19:00\",\n" +
+                        "  \"reserveTime\" : \"04-03-2020 19:00\",\n" +
                         "  \"tableNumber\" : 2\n" +
                         "}\n" +
                         "]"));

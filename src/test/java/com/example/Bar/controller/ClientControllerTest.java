@@ -55,7 +55,7 @@ class ClientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"name\" : \"Денис\",\n" +
-                                "  \"time\" : \"04.03.2020 19:00\"\n" +
+                                "  \"time\" : \"04-03-2020 19:00\"\n" +
                                 "}"))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{\n" +
@@ -72,7 +72,7 @@ class ClientControllerTest {
                         "  \"id\" : 1,\n" +
                         "  \"eventName\" : \"StandUp вечер\",\n" +
                         "  \"description\" : \"Много известных комиков\",\n" +
-                        "  \"date\" : \"04.03.2020\"\n" +
+                        "  \"date\" : \"04-03-2020 20:00\"\n" +
                         "}\n" +
                         "]"));
     }

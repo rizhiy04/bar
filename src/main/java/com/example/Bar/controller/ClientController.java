@@ -1,8 +1,8 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.eventDTO.EventDTO;
-import com.example.Bar.dto.menuItemDTO.MenuItemDTO;
-import com.example.Bar.dto.reservationDTO.ReservationRequestDTO;
+import com.example.Bar.dto.event.EventDTO;
+import com.example.Bar.dto.menuItem.MenuItemDTO;
+import com.example.Bar.dto.reservation.ReservationRequestDTO;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.service.ClientService;
 import lombok.AllArgsConstructor;
@@ -26,13 +26,13 @@ public class ClientController {
 
     @GetMapping("/menu/{category}")
     @ResponseStatus(HttpStatus.OK)
-    public List<MenuItemDTO> getMenuByCategory(@PathVariable("category") String category){
+    public List<MenuItemDTO> getMenuByCategory(@PathVariable("category") final String category){
         return clientService.getMenuByCategory(category);
     }
 
     @PostMapping("/reserveTable")
     @ResponseStatus(HttpStatus.CREATED)
-    public TextResponse reserveTable(@RequestBody ReservationRequestDTO reserve){
+    public TextResponse reserveTable(@RequestBody final ReservationRequestDTO reserve){
         return clientService.reserveTable(reserve);
     }
 

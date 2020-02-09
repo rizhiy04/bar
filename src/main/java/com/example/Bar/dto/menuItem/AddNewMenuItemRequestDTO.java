@@ -1,4 +1,4 @@
-package com.example.Bar.dto.menuItemDTO;
+package com.example.Bar.dto.menuItem;
 
 import lombok.Data;
 
