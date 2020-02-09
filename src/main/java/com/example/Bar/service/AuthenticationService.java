@@ -1,10 +1,13 @@
 package com.example.Bar.service;
 
-import com.example.Bar.dto.SignInRequestDTO;
+import com.example.Bar.dto.authenticationDTO.SignInRequestDTO;
+import com.example.Bar.dto.authenticationDTO.SignUpRequestDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
+
+    public void signUp(SignUpRequestDTO signUpRequestDTO){}
 
     public String signIn(SignInRequestDTO signInRequestDTO){
         return "{\n" +

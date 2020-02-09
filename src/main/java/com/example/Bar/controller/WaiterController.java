@@ -1,20 +1,20 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.CloseOrderRequestDTO;
-import com.example.Bar.dto.MakeNewOrderRequestDTO;
-import com.example.Bar.dto.ReservationDTO;
+import com.example.Bar.dto.orderDTO.CloseOrderRequestDTO;
+import com.example.Bar.dto.orderDTO.MakeNewOrderRequestDTO;
+import com.example.Bar.dto.reservationDTO.FreeTablesDTO;
+import com.example.Bar.dto.reservationDTO.ReservationDTO;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.service.WaiterService;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Data
+@AllArgsConstructor
 @RestController
-@RequestMapping(value = "/bar/waiter", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+@RequestMapping("/waiter")
 public class WaiterController {
 
     private final WaiterService waiterService;
@@ -28,7 +28,7 @@ public class WaiterController {
 
     @GetMapping("/freeTables/{hours}")
     @ResponseStatus(HttpStatus.OK)
-    public String getFreeTable(@PathVariable("hours")String hours){
+    public FreeTablesDTO getFreeTable(@PathVariable("hours")String hours){
         return waiterService.getFreeTable(hours);
     }
 

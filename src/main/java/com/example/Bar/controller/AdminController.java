@@ -1,17 +1,21 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.dto.*;
+import com.example.Bar.dto.eventDTO.AddNewEventRequestDTO;
+import com.example.Bar.dto.inventoryDTO.AddNewInventoryRequestDTO;
+import com.example.Bar.dto.inventoryDTO.ChangeInventoryCountRequestDTO;
+import com.example.Bar.dto.inventoryDTO.InventoryDTO;
+import com.example.Bar.dto.menuItemDTO.AddNewMenuItemRequestDTO;
 import com.example.Bar.service.AdminService;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Data
+@AllArgsConstructor
 @RestController
-@RequestMapping(value = "/bar/admin", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+@RequestMapping(value = "/admin")
 public class AdminController {
 
     private final AdminService adminService;

@@ -1,15 +1,14 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.SignInRequestDTO;
-import com.example.Bar.dto.SignUpRequestDTO;
+import com.example.Bar.dto.authenticationDTO.SignInRequestDTO;
+import com.example.Bar.dto.authenticationDTO.SignUpRequestDTO;
 import com.example.Bar.service.AuthenticationService;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Data
+@AllArgsConstructor
 @RestController
-@RequestMapping("/bar")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
@@ -17,7 +16,9 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody SignUpRequestDTO signUpRequestDTO){}
+    public void signUp(@RequestBody SignUpRequestDTO signUpRequestDTO){
+        authenticationService.signUp(signUpRequestDTO);
+    }
 
     @PostMapping("/sign-in")
     @ResponseStatus(HttpStatus.OK)

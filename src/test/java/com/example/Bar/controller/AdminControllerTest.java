@@ -22,7 +22,7 @@ class AdminControllerTest {
 
     @Test
     public void testGetInventoryIsOk() throws Exception{
-        mockMvc.perform(get("/bar/admin/inventoryCount"))
+        mockMvc.perform(get("/admin/inventoryCount"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n" +
                         "{\n" +
@@ -36,7 +36,7 @@ class AdminControllerTest {
 
     @Test
     public void testChangeInventoryCountIsOk() throws Exception{
-        mockMvc.perform(post("/bar/admin/inventoryCount")
+        mockMvc.perform(post("/admin/inventoryCount")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"id\" : 1,\n" +
@@ -50,7 +50,7 @@ class AdminControllerTest {
 
     @Test
     public void testAddNewInventoryIsCreated() throws Exception{
-        mockMvc.perform(post("/bar/admin/newInventory")
+        mockMvc.perform(post("/admin/newInventory")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"name\" : \"Бокал 500 мл\",\n" +
@@ -65,7 +65,7 @@ class AdminControllerTest {
 
     @Test
     public void testDeleteInventoryIsOk() throws Exception{
-        mockMvc.perform(delete("/bar/admin/deleteInventory/1"))
+        mockMvc.perform(delete("/admin/deleteInventory/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "  \"response\" : \"Инвентарь удален\"\n" +
@@ -74,7 +74,7 @@ class AdminControllerTest {
 
     @Test
     public void testAddNewEventIsCreated() throws Exception{
-        mockMvc.perform(post("/bar/admin/addNewEvent")
+        mockMvc.perform(post("/admin/addNewEvent")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"eventName\" : \"StandUp вечер\",\n" +
@@ -89,7 +89,7 @@ class AdminControllerTest {
 
     @Test
     public void testDeleteEventIsOk() throws Exception{
-        mockMvc.perform(delete("/bar/admin/deleteEvent/1"))
+        mockMvc.perform(delete("/admin/deleteEvent/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "  \"response\" : \"Мероприятие удалено\"\n" +
@@ -98,7 +98,7 @@ class AdminControllerTest {
 
     @Test
     public void testAddNewMenuItemIsCreated() throws Exception{
-        mockMvc.perform(post("/bar/admin/addNewMenuItem")
+        mockMvc.perform(post("/admin/addNewMenuItem")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"name\" : \"Zatecky Gus\",\n" +
@@ -114,7 +114,7 @@ class AdminControllerTest {
 
     @Test
     public void testDeleteMenuItemIsOk() throws Exception{
-        mockMvc.perform(delete("/bar/admin/deleteMenuItem/1"))
+        mockMvc.perform(delete("/admin/deleteMenuItem/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "  \"response\" : \"Позиция удалена\"\n" +

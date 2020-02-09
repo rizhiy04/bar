@@ -1,16 +1,21 @@
 package com.example.Bar.service;
 
 import com.example.Bar.dto.*;
+import com.example.Bar.dto.eventDTO.AddNewEventRequestDTO;
+import com.example.Bar.dto.inventoryDTO.AddNewInventoryRequestDTO;
+import com.example.Bar.dto.inventoryDTO.ChangeInventoryCountRequestDTO;
+import com.example.Bar.dto.inventoryDTO.InventoryDTO;
+import com.example.Bar.dto.menuItemDTO.AddNewMenuItemRequestDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class AdminService {
 
     public List<InventoryDTO> getInventory(){
-        return Arrays.asList(new InventoryDTO(1, "Рюмка 50 мл", "glass", 23));
+        return Collections.singletonList(new InventoryDTO(1, "Рюмка 50 мл", "glass", 23));
     }
 
     public TextResponse changeInventoryCount(ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO){

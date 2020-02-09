@@ -1,9 +1,9 @@
-package com.example.Bar.dto;
+package com.example.Bar.dto.orderDTO;
 
 import lombok.Data;
 
 @Data
-public class ChangeInventoryCountRequestDTO {
+public class Order {
 
     private Integer id;
     private Integer count;

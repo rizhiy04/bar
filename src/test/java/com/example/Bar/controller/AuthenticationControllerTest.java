@@ -20,7 +20,7 @@ class AuthenticationControllerTest {
 
     @Test
     public void testSignUpIsCreated() throws Exception{
-        mockMvc.perform(post("/bar/sign-up")
+        mockMvc.perform(post("/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"email\" : \"client@gmail.com\",\n" +
@@ -32,7 +32,7 @@ class AuthenticationControllerTest {
 
     @Test
     public void testSignInIsOk() throws Exception{
-        mockMvc.perform(post("/bar/sign-in")
+        mockMvc.perform(post("/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"email\" : \"client@gmail.com\",\n" +

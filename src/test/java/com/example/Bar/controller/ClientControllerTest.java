@@ -21,7 +21,7 @@ class ClientControllerTest {
 
     @Test
     public void testGetMenuIsOk() throws Exception{
-        mockMvc.perform(get("/bar/menu"))
+        mockMvc.perform(get("/menu"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
@@ -36,7 +36,7 @@ class ClientControllerTest {
 
     @Test
     public void testGetMenuByCategoryIsOk() throws Exception{
-        mockMvc.perform(get("/bar/menu/pizza"))
+        mockMvc.perform(get("/menu/pizza"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
@@ -51,7 +51,7 @@ class ClientControllerTest {
 
     @Test
     public void testReserveTableIsCreated() throws Exception{
-        mockMvc.perform(post("/bar/reserveTable")
+        mockMvc.perform(post("/reserveTable")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"name\" : \"Денис\",\n" +
@@ -65,7 +65,7 @@ class ClientControllerTest {
 
     @Test
     public void testGetEventsIsOk() throws Exception{
-        mockMvc.perform(get("/bar/events"))
+        mockMvc.perform(get("/events"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +

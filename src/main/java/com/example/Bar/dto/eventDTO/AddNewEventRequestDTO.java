@@ -1,4 +1,4 @@
-package com.example.Bar.dto;
+package com.example.Bar.dto.eventDTO;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.example.Bar.dto;
+package com.example.Bar.dto.orderDTO;
 
 import lombok.Data;
 

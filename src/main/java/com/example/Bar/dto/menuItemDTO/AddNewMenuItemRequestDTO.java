@@ -1,13 +1,10 @@
-package com.example.Bar.dto;
+package com.example.Bar.dto.menuItemDTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@AllArgsConstructor
 @Data
-public class MenuItemDTO {
+public class AddNewMenuItemRequestDTO {
 
-    private Integer id;
     private String name;
     private String category;
     private String description;

@@ -1,20 +1,18 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.EventDTO;
-import com.example.Bar.dto.MenuItemDTO;
-import com.example.Bar.dto.ReservationRequestDTO;
+import com.example.Bar.dto.eventDTO.EventDTO;
+import com.example.Bar.dto.menuItemDTO.MenuItemDTO;
+import com.example.Bar.dto.reservationDTO.ReservationRequestDTO;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.service.ClientService;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Data
+@AllArgsConstructor
 @RestController
-@RequestMapping(value = "/bar", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
 public class ClientController {
 
     private final ClientService clientService;

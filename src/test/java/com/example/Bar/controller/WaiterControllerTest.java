@@ -21,7 +21,7 @@ class WaiterControllerTest {
 
     @Test
     public void testGetReservationIsOk() throws Exception{
-        mockMvc.perform(get("/bar/waiter/reservation"))
+        mockMvc.perform(get("/waiter/reservation"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
@@ -35,18 +35,16 @@ class WaiterControllerTest {
 
     @Test
     public void testGetFreeTablesIsOk() throws Exception{
-        mockMvc.perform(get("/bar/waiter/freeTables/2"))
+        mockMvc.perform(get("/waiter/freeTables/2"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[\n"+
-                        "{\n" +
-                        "  \"tableNumber\" : 1\n" +
-                        "}\n" +
-                        "]"));
+                .andExpect(content().json("{\n" +
+                        "  \"tableNumbers\" : [1, 3]\n" +
+                        "}\n"));
     }
 
     @Test
     public void testNewOrderIsCreated() throws Exception{
-        mockMvc.perform(post("/bar/waiter/makeOrder")
+        mockMvc.perform(post("/waiter/makeOrder")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"tableNumber\" : 2,\n" +
@@ -65,7 +63,7 @@ class WaiterControllerTest {
 
     @Test
     public void testCloseOrderIsOk() throws Exception{
-        mockMvc.perform(post("/bar/waiter/closeOrder")
+        mockMvc.perform(post("/waiter/closeOrder")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"tableNumber\" : 2,\n" +
