@@ -5,18 +5,14 @@ import com.example.Bar.dto.order.MakeNewOrderRequestDTO;
 import com.example.Bar.dto.reservation.FreeTablesDTO;
 import com.example.Bar.dto.reservation.ReservationDTO;
 import com.example.Bar.dto.TextResponse;
-import com.example.Bar.entity.MenuItem;
-import com.example.Bar.entity.Order;
-import com.example.Bar.entity.Reservation;
+import com.example.Bar.entity.OrderEntity;
 import com.example.Bar.repository.ReservationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,19 +21,10 @@ public class WaiterService {
     private final ReservationRepository reservationRepository;
 
     public List<ReservationDTO> getReservation(){
-        List<ReservationDTO> response = new ArrayList<>();
-
-        for (Reservation reservation : reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.now())){
-            ReservationDTO reservationDTO = new ReservationDTO();
-            reservationDTO.setId(reservation.getId());
-            reservationDTO.setClientName(reservation.getName());
-            reservationDTO.setReserveTime(reservation.getTime());
-            reservationDTO.setTableNumber(reservation.getTableNumber());
-
-            response.add(reservationDTO);
-        }
-
-        return response;
+        LocalDateTime now = LocalDateTime.now();
+        return reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute())).stream().map(
+                reservation -> new ReservationDTO(reservation.getId(), reservation.getName(), reservation.getTableNumber(), reservation.getTime()))
+                .collect(Collectors.toList());
     }
 
     //TODO
@@ -47,9 +34,9 @@ public class WaiterService {
 
     //TODO
     public TextResponse makeNewOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO){
-        Order order = new Order();
-        order.setTableNumber(makeNewOrderRequestDTO.getTableNumber());
-        order.setTimeOpen(LocalDateTime.now());
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setTableNumber(makeNewOrderRequestDTO.getTableNumber());
+        orderEntity.setTimeOpen(LocalDateTime.now());
 
         return null;
     }

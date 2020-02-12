@@ -8,17 +8,16 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "events")
+@Table(name = "reservations")
 @Data
-public class Event extends BaseEntity {
+public class ReservationEntity extends BaseEntity {
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "time")
     private LocalDateTime time;
 
+    @Column(name = "table_number")
+    private Integer tableNumber;
 }

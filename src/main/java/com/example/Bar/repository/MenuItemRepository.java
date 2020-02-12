@@ -1,13 +1,13 @@
 package com.example.Bar.repository;
 
-import com.example.Bar.entity.MenuItem;
+import com.example.Bar.entity.MenuItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
+public interface MenuItemRepository extends JpaRepository<MenuItemEntity, Integer> {
 
-    List<MenuItem> findAllByCategory(String category);
+    List<MenuItemEntity> findAllByCategory(String category);
 }

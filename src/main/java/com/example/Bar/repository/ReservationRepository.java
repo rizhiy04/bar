@@ -1,6 +1,6 @@
 package com.example.Bar.repository;
 
-import com.example.Bar.entity.Reservation;
+import com.example.Bar.entity.ReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
+public interface ReservationRepository extends JpaRepository<ReservationEntity, Integer> {
 
-    List<Reservation> findAllByTimeAfterOrderById(LocalDateTime time);
+    List<ReservationEntity> findAllByTimeAfterOrderById(LocalDateTime time);
 
-    List<Reservation> findAllByTimeAfterAndTimeBefore(LocalDateTime after, LocalDateTime before);
+    List<ReservationEntity> findAllByTimeAfterAndTimeBefore(LocalDateTime after, LocalDateTime before);
 }

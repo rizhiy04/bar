@@ -1,22 +1,14 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.TextResponse;
-import com.example.Bar.dto.order.CloseOrderRequestDTO;
-import com.example.Bar.dto.order.MakeNewOrderRequestDTO;
-import com.example.Bar.dto.order.Order;
-import com.example.Bar.dto.reservation.FreeTablesDTO;
-import com.example.Bar.dto.reservation.ReservationDTO;
+import com.example.Bar.entity.ReservationEntity;
 import com.example.Bar.security.Roles;
-import com.example.Bar.service.WaiterService;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.mockito.BDDMockito.given;
@@ -30,14 +22,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class WaiterControllerTest extends AbstractControllerTest {
 
-    @MockBean
-    private WaiterService waiterService;
-
     @Test
     public void testGetReservationIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-        given(waiterService.getReservation()).willReturn(Collections.singletonList(new ReservationDTO(1, "Денис", 2, LocalDateTime.of(2020, 3, 4, 19,0))));
+        ReservationEntity reservationEntity = new ReservationEntity();
+        reservationEntity.setId(1);
+        reservationEntity.setName("Денис");
+        reservationEntity.setTableNumber(2);
+        reservationEntity.setTime(LocalDateTime.of(2020, 3,4,19,0));
+
+        LocalDateTime now = LocalDateTime.now();
+        given(reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute()))).willReturn(Collections.singletonList(reservationEntity));
 
         mockMvc.perform(get("/waiter/reservation").header("Authorization", token))
                 .andExpect(status().isOk())
@@ -63,7 +59,7 @@ class WaiterControllerTest extends AbstractControllerTest {
     public void testGetFreeTablesIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-        given(waiterService.getFreeTable("2")).willReturn(new FreeTablesDTO(Arrays.asList(1,3)));
+//        given(waiterService.getFreeTable("2")).willReturn(new FreeTablesDTO(Arrays.asList(1,3)));
 
         mockMvc.perform(get("/waiter/freeTables/2").header("Authorization", token))
                 .andExpect(status().isOk())
@@ -84,7 +80,7 @@ class WaiterControllerTest extends AbstractControllerTest {
     public void testNewOrderIsCreated() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-        given(waiterService.makeNewOrder(new MakeNewOrderRequestDTO(2, Collections.singletonList(new Order(1, 5))))).willReturn(new TextResponse("Заказ оформлен"));
+//        given(waiterService.makeNewOrder(new MakeNewOrderRequestDTO(2, Collections.singletonList(new OrderEntity(1, 5))))).willReturn(new TextResponse("Заказ оформлен"));
 
         mockMvc.perform(post("/waiter/makeOrder").header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,7 +121,7 @@ class WaiterControllerTest extends AbstractControllerTest {
     public void testCloseOrderIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-        given(waiterService.closeOrder(new CloseOrderRequestDTO(2,1))).willReturn(new TextResponse("Заказ закрыт, к оплате 25р"));
+//        given(waiterService.closeOrder(new CloseOrderRequestDTO(2,1))).willReturn(new TextResponse("Заказ закрыт, к оплате 25р"));
 
         mockMvc.perform(post("/waiter/closeOrder").header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)

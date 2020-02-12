@@ -20,5 +20,5 @@ public class UserDiscountCard extends BaseEntity {
     private Double allSpentMoney;
 
     @OneToOne(mappedBy = "userDiscountCard")
-    private User user;
+    private UserEntity userEntity;
 }

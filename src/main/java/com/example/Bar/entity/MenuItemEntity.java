@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "menu_items")
 @Data
-public class MenuItem extends BaseEntity{
+public class MenuItemEntity extends BaseEntity{
 
     @Column(name = "name")
     private String name;

@@ -1,6 +1,7 @@
 package com.example.Bar.entity;
 
 
+import com.example.Bar.security.Roles;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @Data
-public class User extends BaseEntity{
+public class UserEntity extends BaseEntity{
 
     @Column(name = "email")
     private String email;
@@ -16,9 +17,9 @@ public class User extends BaseEntity{
     @Column(name = "password")
     private String password;
 
-    @Column(name = "permission")
+    @Column(name = "roles")
     @Enumerated(EnumType.STRING)
-    private Permission permission;
+    private Roles roles;
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")

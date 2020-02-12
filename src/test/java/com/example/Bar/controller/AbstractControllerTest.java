@@ -1,6 +1,7 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.dto.authentication.SignInResponse;
+import com.example.Bar.repository.*;
 import com.example.Bar.security.LoadUserDetailService;
 import com.example.Bar.security.Roles;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,17 @@ public class AbstractControllerTest {
     protected PasswordEncoder passwordEncoder;
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    protected InventoryRepository inventoryRepository;
+    @MockBean
+    protected EventRepository eventRepository;
+    @MockBean
+    protected MenuItemRepository menuItemRepository;
+    @MockBean
+    protected ReservationRepository reservationRepository;
+    @MockBean
+    protected UserRepository userRepository;
 
     @MockBean
     protected LoadUserDetailService loadUserDetailService;
