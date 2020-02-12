@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AbstractControllerTest {
 
     @Autowired
-    protected MockMvc mockMvc;
+    protected  MockMvc mockMvc;
     @Autowired
     protected PasswordEncoder passwordEncoder;
     @Autowired

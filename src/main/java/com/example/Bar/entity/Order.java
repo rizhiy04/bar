@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class Order extends BaseEntity {
 
-    @Column(name = "table_namber")
+    @Column(name = "table_number")
     private Integer tableNumber;
 
     @Column(name = "time_open")

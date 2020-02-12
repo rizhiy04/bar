@@ -5,30 +5,58 @@ import com.example.Bar.dto.order.MakeNewOrderRequestDTO;
 import com.example.Bar.dto.reservation.FreeTablesDTO;
 import com.example.Bar.dto.reservation.ReservationDTO;
 import com.example.Bar.dto.TextResponse;
+import com.example.Bar.entity.MenuItem;
+import com.example.Bar.entity.Order;
+import com.example.Bar.entity.Reservation;
+import com.example.Bar.repository.ReservationRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class WaiterService {
 
+    private final ReservationRepository reservationRepository;
+
     public List<ReservationDTO> getReservation(){
-        return Collections.singletonList(new ReservationDTO(1, "Денис", 2, LocalDateTime.of(2020, 3, 4, 19,0)));
+        List<ReservationDTO> response = new ArrayList<>();
+
+        for (Reservation reservation : reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.now())){
+            ReservationDTO reservationDTO = new ReservationDTO();
+            reservationDTO.setId(reservation.getId());
+            reservationDTO.setClientName(reservation.getName());
+            reservationDTO.setReserveTime(reservation.getTime());
+            reservationDTO.setTableNumber(reservation.getTableNumber());
+
+            response.add(reservationDTO);
+        }
+
+        return response;
     }
 
+    //TODO
     public FreeTablesDTO getFreeTable(final String hours){
-        return new FreeTablesDTO(Arrays.asList(1,3));
+        return null;
     }
 
+    //TODO
     public TextResponse makeNewOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO){
-        return new TextResponse("Заказ оформлен");
+        Order order = new Order();
+        order.setTableNumber(makeNewOrderRequestDTO.getTableNumber());
+        order.setTimeOpen(LocalDateTime.now());
+
+        return null;
     }
 
+    //TODO
     public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO){
-        return new TextResponse("Заказ закрыт, к оплате 25р");
+        return null;
     }
 
 }

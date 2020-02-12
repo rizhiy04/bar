@@ -16,7 +16,7 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public SignInResponse signUp(@RequestBody final SignUpRequestDTO signUpRequestDTO){
+    public SignInResponse signUp(@RequestBody final SignUpRequestDTO signUpRequestDTO) throws Exception{
         return authenticationService.signUp(signUpRequestDTO);
     }
 

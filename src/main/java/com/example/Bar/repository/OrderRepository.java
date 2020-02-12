@@ -1,6 +1,6 @@
 package com.example.Bar.repository;
 
-import com.example.Bar.dto.order.Order;
+import com.example.Bar.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

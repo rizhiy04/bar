@@ -1,6 +1,9 @@
 package com.example.Bar.security;
 
+import com.example.Bar.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,27 +13,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class LoadUserDetailService implements UserDetailsService {
 
-    private final PasswordEncoder passwordEncoder;
-
-    private final Map<String, String> inMemoryUsers = new HashMap<>();
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final String password = inMemoryUsers.get(username);
-        if (password == null) {
+        com.example.Bar.entity.User user = userRepository.findByEmail(username);
+        if (user == null) {
             throw new UsernameNotFoundException("User with email: " + username + " not found");
         } else {
-            return new User(username, password, Collections.emptyList());
+            return new User(username, user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getPermission().name())));
         }
-    }
-
-    public void saveUser(final String username, final String password) {
-        inMemoryUsers.put(username, passwordEncoder.encode(password));
     }
 }
