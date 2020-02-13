@@ -22,8 +22,7 @@ class AuthenticationControllerTest extends AbstractControllerTest {
     @Test
     public void testSignUpIsCreated() throws Exception{
 
-        //TODO doesn't work (NullPointedException)
-        given(userRepository.findByEmail("client@gmail.com")).willReturn(null);
+        given(userRepository.findByEmail("client@gmail.com")).willReturn(Optional.empty());
 
         mockMvc.perform(post("/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)

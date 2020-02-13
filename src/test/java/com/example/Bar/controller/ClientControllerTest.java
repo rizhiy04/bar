@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -114,8 +115,7 @@ class ClientControllerTest extends AbstractControllerTest {
         eventEntity.setDescription("Много известных комиков");
         eventEntity.setTime(LocalDateTime.of(2020, 3,4,20,0));
 
-        LocalDateTime now = LocalDateTime.now();
-        given(eventRepository.findAllByTimeAfterOrderByIdAsc(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute()))).willReturn(Collections.singletonList(eventEntity));
+        given(eventRepository.findAllByTimeAfterOrderByIdAsc(any(LocalDateTime.class))).willReturn(Collections.singletonList(eventEntity));
 
         mockMvc.perform(get("/events"))
                 .andExpect(status().isOk())

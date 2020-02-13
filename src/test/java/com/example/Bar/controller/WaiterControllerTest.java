@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -75,8 +76,7 @@ class WaiterControllerTest extends AbstractControllerTest {
         reservationEntity.setTime(now.plusHours(1));
         reservationEntity.setTableNumber(2);
 
-        //TODO doesn't work
-        given(reservationRepository.findAllByTimeAfterAndTimeBefore(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute()), now.plusHours(2))).willReturn(Collections.singletonList(reservationEntity));
+        given(reservationRepository.findAllByTimeAfterAndTimeBefore(any(LocalDateTime.class), any(LocalDateTime.class))).willReturn(Collections.singletonList(reservationEntity));
 
         mockMvc.perform(get("/waiter/freeTables/2").header("Authorization", token))
                 .andExpect(status().isOk())

@@ -29,7 +29,7 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
 
-    public SignInResponse signUp(final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
+    public void signUp(final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
 
         if (userRepository.findByEmail(signUpRequestDTO.getEmail()).isPresent()){
             throw new SuchUserAlreadyExistException("User already exist");
@@ -48,7 +48,7 @@ public class AuthenticationService {
 
         userRepository.save(userEntity);
 
-        return signIn(new SignInRequestDTO(signUpRequestDTO.getEmail(), signUpRequestDTO.getPassword()));
+//        return signIn(new SignInRequestDTO(signUpRequestDTO.getEmail(), signUpRequestDTO.getPassword()));
     }
 
     public SignInResponse signIn(final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, WrongPasswordException {
