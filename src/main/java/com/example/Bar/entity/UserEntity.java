@@ -23,5 +23,5 @@ public class UserEntity extends BaseEntity{
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private UserDiscountCard userDiscountCard;
+    private UserDiscountCardEntity userDiscountCardEntity;
 }

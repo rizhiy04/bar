@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "discount_card")
 @Data
-public class UserDiscountCard extends BaseEntity {
+public class UserDiscountCardEntity extends BaseEntity {
 
     @Column(name = "name")
     private String name;
@@ -19,6 +19,6 @@ public class UserDiscountCard extends BaseEntity {
     @Column(name = "all_spent_money")
     private Double allSpentMoney;
 
-    @OneToOne(mappedBy = "userDiscountCard")
+    @OneToOne(mappedBy = "userDiscountCardEntity")
     private UserEntity userEntity;
 }

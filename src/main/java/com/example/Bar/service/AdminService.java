@@ -9,6 +9,7 @@ import com.example.Bar.dto.menuItem.AddNewMenuItemRequestDTO;
 import com.example.Bar.entity.EventEntity;
 import com.example.Bar.entity.InventoryEntity;
 import com.example.Bar.entity.MenuItemEntity;
+import com.example.Bar.exception.NoSuchElementException;
 import com.example.Bar.repository.EventRepository;
 import com.example.Bar.repository.InventoryRepository;
 import com.example.Bar.repository.MenuItemRepository;
@@ -16,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,26 +34,17 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    //TODO change exception
-    public TextResponse changeInventoryCount(final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws Exception{
-        Optional<InventoryEntity> optionalInventory = inventoryRepository.findById(changeInventoryCountRequestDTO.getId());
+    public TextResponse changeInventoryCount(final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws NoSuchElementException{
+        InventoryEntity inventoryEntity = inventoryRepository.findById(changeInventoryCountRequestDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("Such inventoryEntity doesn't exist"));
 
-        if (!optionalInventory.isPresent()){
-            throw new Exception("No such element");
-        }
-
-        optionalInventory.get().setCount(changeInventoryCountRequestDTO.getCount());
-        inventoryRepository.save(optionalInventory.get());
+        inventoryEntity.setCount(changeInventoryCountRequestDTO.getCount());
+        inventoryRepository.save(inventoryEntity);
 
         return new TextResponse("Сохранено");
     }
 
-    //TODO change exception
-    public TextResponse addNewInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO) throws Exception{
-
-        if (addNewInventoryRequestDTO.getName() == null || addNewInventoryRequestDTO.getCategory() == null || addNewInventoryRequestDTO.getCount() == null){
-            throw new Exception("Bad Request");
-        }
+    public TextResponse addNewInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
 
         InventoryEntity inventoryEntity = new InventoryEntity();
         inventoryEntity.setName(addNewInventoryRequestDTO.getName());
@@ -65,25 +56,16 @@ public class AdminService {
         return new TextResponse("Инвентарь добавлен");
     }
 
-    //TODO change exception
-    public TextResponse deleteInventory(final Integer inventoryId) throws Exception{
-        Optional<InventoryEntity> optionalInventory = inventoryRepository.findById(inventoryId);
+    public TextResponse deleteInventory(final Integer inventoryId) throws NoSuchElementException{
+        InventoryEntity inventoryEntity = inventoryRepository.findById(inventoryId)
+                .orElseThrow(() -> new NoSuchElementException("Such inventoryEntity doesn't exist"));
 
-        if (!optionalInventory.isPresent()){
-            throw new Exception("No such element");
-        }
-
-        inventoryRepository.delete(optionalInventory.get());
+        inventoryRepository.delete(inventoryEntity);
 
         return new TextResponse("Инвентарь удален");
     }
 
-    //TODO change exception
-    public TextResponse addNewEvent(final AddNewEventRequestDTO addNewEventRequestDTO) throws Exception{
-
-        if (addNewEventRequestDTO.getEventName() == null || addNewEventRequestDTO.getDescription() == null || addNewEventRequestDTO.getDate() == null){
-            throw new Exception("Bad Request");
-        }
+    public TextResponse addNewEvent(final AddNewEventRequestDTO addNewEventRequestDTO){
 
         EventEntity eventEntity = new EventEntity();
         eventEntity.setName(addNewEventRequestDTO.getEventName());
@@ -95,25 +77,16 @@ public class AdminService {
         return new TextResponse("Мероприятие добавлено");
     }
 
-    //TODO change exception
-    public TextResponse deleteEvent(final Integer eventId) throws Exception{
-        Optional<EventEntity> optionalEvent = eventRepository.findById(eventId);
+    public TextResponse deleteEvent(final Integer eventId) throws NoSuchElementException{
+        EventEntity eventEntity = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("Such eventEntity doesn't exist"));
 
-        if (!optionalEvent.isPresent()){
-            throw new Exception("No such element");
-        }
-
-        eventRepository.delete(optionalEvent.get());
+        eventRepository.delete(eventEntity);
 
         return new TextResponse("Мероприятие удалено");
     }
 
-    //TODO change exception
-    public TextResponse addNewMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO) throws Exception{
-
-        if (addNewMenuItemRequestDTO.getName() == null || addNewMenuItemRequestDTO.getCategory() == null || addNewMenuItemRequestDTO.getDescription() == null|| addNewMenuItemRequestDTO.getPrice() == null){
-            throw new Exception("Bad Request");
-        }
+    public TextResponse addNewMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
 
         MenuItemEntity menuItemEntity = new MenuItemEntity();
         menuItemEntity.setName(addNewMenuItemRequestDTO.getName());
@@ -126,15 +99,11 @@ public class AdminService {
         return new TextResponse("Позиция добавлена");
     }
 
-    //TODO change exception
-    public TextResponse deleteMenuItem(final Integer productId) throws Exception{
-        Optional<MenuItemEntity> optionalMenuItem = menuItemRepository.findById(productId);
+    public TextResponse deleteMenuItem(final Integer productId) throws NoSuchElementException{
+        MenuItemEntity menuItemEntity = menuItemRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("Such menuItem doesn't exist"));
 
-        if (!optionalMenuItem.isPresent()){
-            throw new Exception("No such element");
-        }
-
-        menuItemRepository.delete(optionalMenuItem.get());
+        menuItemRepository.delete(menuItemEntity);
 
         return new TextResponse("Позиция удалена");
     }

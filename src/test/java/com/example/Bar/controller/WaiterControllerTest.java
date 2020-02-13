@@ -1,6 +1,6 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.entity.ReservationEntity;
+import com.example.Bar.entity.*;
 import com.example.Bar.security.Roles;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,7 +60,23 @@ class WaiterControllerTest extends AbstractControllerTest {
     public void testGetFreeTablesIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-//        given(waiterService.getFreeTable("2")).willReturn(new FreeTablesDTO(Arrays.asList(1,3)));
+        InventoryEntity inventoryEntity = new InventoryEntity();
+        inventoryEntity.setId(100);
+        inventoryEntity.setName("Стол");
+        inventoryEntity.setCategory("table");
+        inventoryEntity.setCount(3);
+
+        given(inventoryRepository.findByCategory("table")).willReturn(Optional.of(inventoryEntity));
+
+        LocalDateTime now = LocalDateTime.now();
+        ReservationEntity reservationEntity = new ReservationEntity();
+        reservationEntity.setId(1000);
+        reservationEntity.setName("Qwer");
+        reservationEntity.setTime(now.plusHours(1));
+        reservationEntity.setTableNumber(2);
+
+        //TODO doesn't work
+        given(reservationRepository.findAllByTimeAfterAndTimeBefore(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute()), now.plusHours(2))).willReturn(Collections.singletonList(reservationEntity));
 
         mockMvc.perform(get("/waiter/freeTables/2").header("Authorization", token))
                 .andExpect(status().isOk())
@@ -80,7 +97,14 @@ class WaiterControllerTest extends AbstractControllerTest {
     public void testNewOrderIsCreated() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-//        given(waiterService.makeNewOrder(new MakeNewOrderRequestDTO(2, Collections.singletonList(new OrderEntity(1, 5))))).willReturn(new TextResponse("Заказ оформлен"));
+        MenuItemEntity menuItemEntity = new MenuItemEntity();
+        menuItemEntity.setId(1);
+        menuItemEntity.setName("Zatecky Gus");
+        menuItemEntity.setCategory("beer");
+        menuItemEntity.setDescription("Светлый лагер с легким традиционным вкусом");
+        menuItemEntity.setPrice(5d);
+
+        given(menuItemRepository.findById(1)).willReturn(Optional.of(menuItemEntity));
 
         mockMvc.perform(post("/waiter/makeOrder").header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +131,7 @@ class WaiterControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"tableNumber\" : 2,\n" +
-                        "  \"order\" : [\n" +
+                        "  \"orderEntity\" : [\n" +
                         "{\n"+
                         "  \"id\" : 1,\n" +
                         "  \"count\" : 5\n" +
@@ -121,7 +145,32 @@ class WaiterControllerTest extends AbstractControllerTest {
     public void testCloseOrderIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-//        given(waiterService.closeOrder(new CloseOrderRequestDTO(2,1))).willReturn(new TextResponse("Заказ закрыт, к оплате 25р"));
+        MenuItemEntity menuItemEntity = new MenuItemEntity();
+        menuItemEntity.setId(1);
+        menuItemEntity.setName("Zatecky Gus");
+        menuItemEntity.setCategory("beer");
+        menuItemEntity.setDescription("Светлый лагер с легким традиционным вкусом");
+        menuItemEntity.setPrice(5d);
+
+        OrderChoiceEntity orderChoiceEntity = new OrderChoiceEntity();
+        orderChoiceEntity.setCount(5);
+        orderChoiceEntity.setMenuItemEntity(menuItemEntity);
+
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setId(1);
+        orderEntity.setTimeOpen(LocalDateTime.now());
+        orderEntity.setTableNumber(2);
+        orderEntity.setOrderChoiceEntities(Collections.singletonList(orderChoiceEntity));
+
+        given(orderRepository.findByTableNumberAndTimeCloseIsNull(2)).willReturn(Optional.of(orderEntity));
+
+        UserDiscountCardEntity userDiscountCardEntity = new UserDiscountCardEntity();
+        userDiscountCardEntity.setId(1);
+        userDiscountCardEntity.setAllSpentMoney(0D);
+        userDiscountCardEntity.setClientDiscount(0D);
+        userDiscountCardEntity.setName("Денис");
+
+        given(userDiscountCardRepository.findById(1)).willReturn(Optional.of(userDiscountCardEntity));
 
         mockMvc.perform(post("/waiter/closeOrder").header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +180,7 @@ class WaiterControllerTest extends AbstractControllerTest {
                                 "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"Заказ закрыт, к оплате 25р\"\n" +
+                        "  \"response\" : \"Заказ закрыт, к оплате 25.0р\"\n" +
                         "}"));
     }
 

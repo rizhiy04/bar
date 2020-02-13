@@ -1,8 +1,8 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.dto.authentication.SignInResponse;
+import com.example.Bar.entity.UserEntity;
 import com.example.Bar.repository.*;
-import com.example.Bar.security.LoadUserDetailService;
 import com.example.Bar.security.Roles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,14 +40,19 @@ public class AbstractControllerTest {
     protected ReservationRepository reservationRepository;
     @MockBean
     protected UserRepository userRepository;
-
     @MockBean
-    protected LoadUserDetailService loadUserDetailService;
+    protected OrderRepository orderRepository;
+    @MockBean
+    protected UserDiscountCardRepository userDiscountCardRepository;
 
     protected String signIn(Roles role) throws Exception{
-        final User user = new User("example@gmail.com", passwordEncoder.encode("qwerty"), List.of(new SimpleGrantedAuthority("ROLE_" + role.name())));
 
-        when(loadUserDetailService.loadUserByUsername("example@gmail.com")).thenReturn(user);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("example@gmail.com");
+        userEntity.setPassword(passwordEncoder.encode("qwerty"));
+        userEntity.setRoles(role);
+
+        given(userRepository.findByEmail("example@gmail.com")).willReturn(Optional.of(userEntity));
 
         final String response = mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)

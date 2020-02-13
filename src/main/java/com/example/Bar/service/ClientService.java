@@ -4,7 +4,9 @@ import com.example.Bar.dto.event.EventDTO;
 import com.example.Bar.dto.menuItem.MenuItemDTO;
 import com.example.Bar.dto.reservation.ReservationRequestDTO;
 import com.example.Bar.dto.TextResponse;
+import com.example.Bar.entity.InventoryEntity;
 import com.example.Bar.entity.ReservationEntity;
+import com.example.Bar.exception.NoSuchElementException;
 import com.example.Bar.repository.EventRepository;
 import com.example.Bar.repository.InventoryRepository;
 import com.example.Bar.repository.MenuItemRepository;
@@ -13,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,19 +40,29 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    //TODO I need to think a little bit
-    public TextResponse reserveTable(final ReservationRequestDTO reserve){
-        Integer tableCount = inventoryRepository.findAllByCategory("table").get(0).getCount();
-        List<ReservationEntity> reservationEntityList = reservationRepository.findAllByTimeAfterAndTimeBefore(reserve.getTime(), reserve.getTime().plusHours(3));
+    public TextResponse reserveTable(final ReservationRequestDTO reserve) throws NoSuchElementException{
+        ReservationEntity reservation = new ReservationEntity();
+        InventoryEntity tables = inventoryRepository.findByCategory("table").orElseThrow(() -> new NoSuchElementException("Tables don't exist"));
+        List<ReservationEntity> reservationEntityList = reservationRepository.findAllByTimeAfterAndTimeBefore(reserve.getTime().minusHours(3), reserve.getTime().plusHours(3));
 
-        if (reservationEntityList.size() == tableCount)
+        if (reservationEntityList.size() == tables.getCount())
             return new TextResponse("Свободных мест на это время нет");
 
+        List<Integer> reservedTable = new ArrayList<>();
+        reservationEntityList.forEach(reservationEntity -> reservedTable.add(reservationEntity.getTableNumber()));
 
+        for (int i = 1; i<= tables.getCount(); i++){
+            if (!reservedTable.contains(i)){
+                reservation.setTableNumber(i);
+                break;
+            }
+        }
 
-        ReservationEntity reservationEntity = new ReservationEntity();
+        reservation.setName(reserve.getName());
+        reservation.setTime(reserve.getTime());
+        reservationRepository.save(reservation);
 
-        return null;
+        return new TextResponse("Ваш столик №" + reservation.getTableNumber());
     }
 
     public List<EventDTO> getEvents(){

@@ -1,23 +1,16 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.dto.authentication.SignInResponse;
-import com.example.Bar.dto.authentication.SignUpRequestDTO;
-import com.example.Bar.security.JwtUtil;
+import com.example.Bar.entity.UserEntity;
 import com.example.Bar.security.Roles;
-import com.example.Bar.service.AuthenticationService;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
-import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,8 +21,9 @@ class AuthenticationControllerTest extends AbstractControllerTest {
 
     @Test
     public void testSignUpIsCreated() throws Exception{
-        final User user = new User("client@gmail.com", passwordEncoder.encode("qwerty"), List.of(new SimpleGrantedAuthority("ROLE_" + Roles.CLIENT.name())));
-        when(loadUserDetailService.loadUserByUsername("client@gmail.com")).thenReturn(user);
+
+        //TODO doesn't work (NullPointedException)
+        given(userRepository.findByEmail("client@gmail.com")).willReturn(null);
 
         mockMvc.perform(post("/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -43,8 +37,13 @@ class AuthenticationControllerTest extends AbstractControllerTest {
 
     @Test
     public void testSignInIsOk() throws Exception{
-        final User user = new User("client@gmail.com", passwordEncoder.encode("qwerty"), List.of(new SimpleGrantedAuthority("CLIENT")));
-        when(loadUserDetailService.loadUserByUsername("client@gmail.com")).thenReturn(user);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("client@gmail.com");
+        userEntity.setPassword(passwordEncoder.encode("qwerty"));
+        userEntity.setRoles(Roles.CLIENT);
+
+        given(userRepository.findByEmail("client@gmail.com")).willReturn(Optional.of(userEntity));
 
         mockMvc.perform(post("/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)

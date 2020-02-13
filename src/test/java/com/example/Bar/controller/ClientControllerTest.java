@@ -1,7 +1,9 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.entity.EventEntity;
+import com.example.Bar.entity.InventoryEntity;
 import com.example.Bar.entity.MenuItemEntity;
+import com.example.Bar.entity.ReservationEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +11,7 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -72,6 +75,23 @@ class ClientControllerTest extends AbstractControllerTest {
 
     @Test
     public void testReserveTableIsCreated() throws Exception{
+
+        InventoryEntity inventoryEntity = new InventoryEntity();
+        inventoryEntity.setId(100);
+        inventoryEntity.setName("Стол");
+        inventoryEntity.setCategory("table");
+        inventoryEntity.setCount(5);
+
+        given(inventoryRepository.findByCategory("table")).willReturn(Optional.of(inventoryEntity));
+
+        ReservationEntity reservationEntity = new ReservationEntity();
+        reservationEntity.setId(1000);
+        reservationEntity.setName("Qwer");
+        reservationEntity.setTime(LocalDateTime.of(2020, 3,4,17,0));
+        reservationEntity.setTableNumber(1);
+
+        LocalDateTime reserveTime = LocalDateTime.of(2020, 3,4,19,0);
+        given(reservationRepository.findAllByTimeAfterAndTimeBefore(reserveTime.minusHours(3), reserveTime.plusHours(3))).willReturn(Collections.singletonList(reservationEntity));
 
         mockMvc.perform(post("/reserveTable")
                         .contentType(MediaType.APPLICATION_JSON)
