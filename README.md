@@ -194,7 +194,7 @@ Response: `200 OK`
 
 Request: 
 
-`GET /bar/waiter/reservationEntity`
+`GET /bar/waiter/reservation`
 
 Response: `200 OK`
 
@@ -232,7 +232,7 @@ Request:
 ```json
 {
   "tableNumber" : 2,
-  "orderEntity" : 
+  "order" : 
      [
       {
         "id" : 1,
