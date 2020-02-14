@@ -19,13 +19,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasRole(Roles.ADMIN.name())
-                .antMatchers("/waiter/**").hasRole(Roles.WAITER.name())
-                .antMatchers("/sign-up", "/sign-in").permitAll()
+                .antMatchers(HttpMethod.GET, "/inventories").hasRole(Roles.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/events", "/inventories", "/menu").hasRole(Roles.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, "/inventories").hasRole(Roles.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/events/*", "/inventories/*", "/menu/*").hasRole(Roles.ADMIN.name())
+
+                .antMatchers(HttpMethod.GET, "/reservation/**").hasRole(Roles.WAITER.name())
+                .antMatchers(HttpMethod.POST, "/order").hasRole(Roles.WAITER.name())
+                .antMatchers(HttpMethod.PATCH, "/order").hasRole(Roles.WAITER.name())
+
+                .antMatchers(HttpMethod.GET, "/menu/*", "/events").permitAll()
+                .antMatchers(HttpMethod.POST, "/reservation", "/sign-up", "/sign-in").permitAll()
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -34,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
     }
 

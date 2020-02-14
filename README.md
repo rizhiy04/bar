@@ -153,7 +153,7 @@ Response: `200 OK`
 
 Request: 
 
-`POST /bar/reserveTable`
+`POST /bar/reservation`
 
 ```json
 {
@@ -194,7 +194,7 @@ Response: `200 OK`
 
 Request: 
 
-`GET /bar/waiter/reservation`
+`GET /bar/reservation`
 
 Response: `200 OK`
 
@@ -213,7 +213,7 @@ Response: `200 OK`
 
 Request: 
 
-`GET /bar/waiter/freeTables/{hours}`
+`GET /bar/reservation/free/{hours}`
 
 Response: `200 OK`
 
@@ -227,7 +227,7 @@ Response: `200 OK`
 
 Request: 
 
-`POST /bar/waiter/makeOrder`
+`POST /bar/order`
 
 ```json
 {
@@ -254,7 +254,7 @@ Response: `201 CREATED`
 
 Request: 
 
-`POST /bar/waiter/closeOrder`
+`PATCH /bar/order`
 
 ```json
 {
@@ -275,7 +275,7 @@ Response: `200 OK`
 
 Request: 
 
-`GET /bar/admin/inventoryCount`
+`GET /bar/inventories`
 
 Response: `200 OK`
 
@@ -294,7 +294,7 @@ Response: `200 OK`
 
 Request: 
 
-`POST /bar/admin/inventoryCount`
+`PATCH /bar/inventories`
 
 ```json
 {
@@ -315,7 +315,7 @@ Response: `200 OK`
 
 Request:
 
-`POST /bar/admin/newInventory`
+`POST /bar/inventories`
 
 ```json
 {
@@ -337,7 +337,7 @@ Response: `201 CREATED`
 
 Request:
 
-`DELETE /bar/admin/deleteInventory/{inventoryId}`
+`DELETE /bar/inventories/{inventoryId}`
 
 Response: `200 OK`
 
@@ -351,7 +351,7 @@ Response: `200 OK`
 
 Request: 
 
-`POST /bar/admin/addNewEvent`
+`POST /bar/events`
 
 ```json
 {
@@ -373,7 +373,7 @@ Response: `201 CREATED`
 
 Request: 
 
-`DELETE /bar/admin/deleteEvent/{eventId}`
+`DELETE /bar/events/{eventId}`
 
 
 Response: `200 OK`
@@ -388,7 +388,7 @@ Response: `200 OK`
 
 Request: 
 
-`POST /bar/admin/addNewMenuItem`
+`POST /bar/menu`
 
 ```json
   {
@@ -411,7 +411,7 @@ Response: `201 CREATED`
 
 Request: 
 
-`DELETE /bar/admin/deleteMenuItem/{productId}`
+`DELETE /bar/menu/{productId}`
 
 Response: `200 OK`
 
