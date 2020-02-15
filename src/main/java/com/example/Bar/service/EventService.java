@@ -26,12 +26,10 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public TextResponse addNewEvent(final AddNewEventRequestDTO addNewEventRequestDTO){
+    public TextResponse addEvent(final AddNewEventRequestDTO addNewEventRequestDTO){
 
         final EventEntity eventEntity = new EventEntity();
-        eventEntity.setName(addNewEventRequestDTO.getEventName());
-        eventEntity.setDescription(addNewEventRequestDTO.getDescription());
-        eventEntity.setTime(addNewEventRequestDTO.getDate());
+        convertDtoToEntity(eventEntity, addNewEventRequestDTO);
 
         eventRepository.save(eventEntity);
 
@@ -45,6 +43,12 @@ public class EventService {
         eventRepository.delete(eventEntity);
 
         return new TextResponse("Мероприятие удалено");
+    }
+
+    private void convertDtoToEntity(final EventEntity eventEntity, final AddNewEventRequestDTO addNewEventRequestDTO){
+        eventEntity.setName(addNewEventRequestDTO.getEventName());
+        eventEntity.setDescription(addNewEventRequestDTO.getDescription());
+        eventEntity.setTime(addNewEventRequestDTO.getDate());
     }
 
 }

@@ -23,13 +23,13 @@ public class ReservationController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ReservationDTO> getReservation(){
-        return reservationService.getReservation();
+        return reservationService.getReservations();
     }
 
     @GetMapping("/free/{hours}")
     @ResponseStatus(HttpStatus.OK)
-    public FreeTablesDTO getFreeTable(@PathVariable("hours") final Integer hours) throws NoSuchElementException {
-        return reservationService.getFreeTable(hours);
+    public FreeTablesDTO getFreeTables(@PathVariable("hours") final Integer hours) throws NoSuchElementException {
+        return reservationService.getFreeTables(hours);
     }
 
     @PostMapping

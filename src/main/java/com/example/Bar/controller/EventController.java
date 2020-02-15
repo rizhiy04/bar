@@ -27,8 +27,8 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TextResponse addNewEvent(@Valid @RequestBody final AddNewEventRequestDTO addNewEventRequestDTO){
-        return eventService.addNewEvent(addNewEventRequestDTO);
+    public TextResponse addEvent(@Valid @RequestBody final AddNewEventRequestDTO addNewEventRequestDTO){
+        return eventService.addEvent(addNewEventRequestDTO);
     }
 
     @DeleteMapping("/{eventId}")

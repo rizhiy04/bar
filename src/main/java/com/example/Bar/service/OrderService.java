@@ -24,8 +24,31 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserDiscountCardRepository userDiscountCardRepository;
 
-    public TextResponse makeNewOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
+    public TextResponse makeOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
         final OrderEntity orderEntity = new OrderEntity();
+        makeOrderEntity(orderEntity, makeNewOrderRequestDTO);
+
+        orderRepository.save(orderEntity);
+
+        return new TextResponse("Заказ оформлен");
+    }
+
+    public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
+
+        final OrderEntity orderEntity = findOrderToClose(closeOrderRequestDTO);
+        double orderPrice = calculatePrice(orderEntity);
+
+        if (closeOrderRequestDTO.getClientId() != null){
+            orderPrice = applyUserDiscountCard(closeOrderRequestDTO.getClientId(), orderPrice);
+        }
+
+        orderEntity.setTimeClose(LocalDateTime.now());
+        orderRepository.save(orderEntity);
+
+        return new TextResponse("Заказ закрыт, к оплате " + orderPrice + "р");
+    }
+
+    private void makeOrderEntity(final OrderEntity orderEntity, final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException{
         orderEntity.setTableNumber(makeNewOrderRequestDTO.getTableNumber());
         orderEntity.setTimeOpen(LocalDateTime.now());
 
@@ -35,37 +58,38 @@ public class OrderService {
             orderChoiceEntity.setCount(order.getCount());
             orderEntity.getOrderChoiceEntities().add(orderChoiceEntity);
         }
+    }
 
-        orderRepository.save(orderEntity);
+    private OrderEntity findOrderToClose(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
+        return orderRepository.findByTableNumberAndTimeCloseIsNull(closeOrderRequestDTO.getTableNumber())
+                .orElseThrow(() -> new NoSuchElementException("Such orderEntity doesn't exist"));
+    }
 
-        return new TextResponse("Заказ оформлен");
+    private double calculatePrice(final OrderEntity orderEntity){
+        double price = 0D;
+
+        for (final OrderChoiceEntity orderChoiceEntity : orderEntity.getOrderChoiceEntities()) {
+            price += orderChoiceEntity.getCount() * orderChoiceEntity.getMenuItemEntity().getPrice();
+        }
+
+        return price;
+    }
+
+    private double applyUserDiscountCard(final Integer clientId, double price) throws NoSuchElementException{
+        final UserDiscountCardEntity userDiscountCardEntity = userDiscountCardRepository.findById(clientId)
+                .orElseThrow(() -> new NoSuchElementException("Such discountCard doesn't exist"));
+
+        price -= price * userDiscountCardEntity.getClientDiscount();
+
+        userDiscountCardEntity.setAllSpentMoney(userDiscountCardEntity.getAllSpentMoney() + price);
+        calculateDiscount(userDiscountCardEntity);
+        userDiscountCardRepository.save(userDiscountCardEntity);
+
+        return price;
     }
 
     //TODO discount system
-    public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
-
-        final OrderEntity orderEntity = orderRepository.findByTableNumberAndTimeCloseIsNull(closeOrderRequestDTO.getTableNumber())
-                .orElseThrow(() -> new NoSuchElementException("Such orderEntity doesn't exist"));
-
-        double totalPrice = 0D;
-        for (final OrderChoiceEntity orderChoiceEntity : orderEntity.getOrderChoiceEntities()) {
-            totalPrice += orderChoiceEntity.getCount() * orderChoiceEntity.getMenuItemEntity().getPrice();
-        }
-
-        if (closeOrderRequestDTO.getClientId() != null){
-            final UserDiscountCardEntity userDiscountCardEntity = userDiscountCardRepository.findById(closeOrderRequestDTO.getClientId())
-                    .orElseThrow(() -> new NoSuchElementException("Such discountCard doesn't exist"));
-
-            totalPrice -= totalPrice * userDiscountCardEntity.getClientDiscount();
-
-            userDiscountCardEntity.setAllSpentMoney(userDiscountCardEntity.getAllSpentMoney() + totalPrice);
-            userDiscountCardRepository.save(userDiscountCardEntity);
-        }
-
-        orderEntity.setTimeClose(LocalDateTime.now());
-        orderRepository.save(orderEntity);
-
-        return new TextResponse("Заказ закрыт, к оплате " + totalPrice + "р");
+    private void calculateDiscount(final UserDiscountCardEntity userDiscountCardEntity){
     }
 
 }

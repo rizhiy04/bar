@@ -22,8 +22,8 @@ public class InventoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<InventoryDTO> getInventory(){
-        return inventoryService.getInventory();
+    public List<InventoryDTO> getInventories(){
+        return inventoryService.getInventories();
     }
 
     @PatchMapping
@@ -34,8 +34,8 @@ public class InventoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TextResponse addNewInventory(@Valid @RequestBody final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
-        return inventoryService.addNewInventory(addNewInventoryRequestDTO);
+    public TextResponse addInventory(@Valid @RequestBody final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+        return inventoryService.addInventory(addNewInventoryRequestDTO);
     }
 
     @DeleteMapping("/{inventoryId}")

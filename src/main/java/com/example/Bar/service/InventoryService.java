@@ -19,7 +19,7 @@ public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
 
-    public List<InventoryDTO> getInventory(){
+    public List<InventoryDTO> getInventories(){
         return inventoryRepository.findAll().stream().map(
                 inventoryEntity -> new InventoryDTO(inventoryEntity.getId(), inventoryEntity.getName(), inventoryEntity.getCategory(), inventoryEntity.getCount()))
                 .collect(Collectors.toList());
@@ -35,12 +35,10 @@ public class InventoryService {
         return new TextResponse("Сохранено");
     }
 
-    public TextResponse addNewInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+    public TextResponse addInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
 
         final InventoryEntity inventoryEntity = new InventoryEntity();
-        inventoryEntity.setName(addNewInventoryRequestDTO.getName());
-        inventoryEntity.setCategory(addNewInventoryRequestDTO.getCategory());
-        inventoryEntity.setCount(addNewInventoryRequestDTO.getCount());
+        convertDtoToEntity(inventoryEntity, addNewInventoryRequestDTO);
 
         inventoryRepository.save(inventoryEntity);
 
@@ -54,6 +52,12 @@ public class InventoryService {
         inventoryRepository.delete(inventoryEntity);
 
         return new TextResponse("Инвентарь удален");
+    }
+
+    private void convertDtoToEntity(final InventoryEntity inventoryEntity, final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+        inventoryEntity.setName(addNewInventoryRequestDTO.getName());
+        inventoryEntity.setCategory(addNewInventoryRequestDTO.getCategory());
+        inventoryEntity.setCount(addNewInventoryRequestDTO.getCount());
     }
 
 }

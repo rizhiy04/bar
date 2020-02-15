@@ -35,32 +35,42 @@ public class AuthenticationService {
             throw new SuchUserAlreadyExistException("User already exist");
         }
 
-        UserDiscountCardEntity userDiscountCardEntity = new UserDiscountCardEntity();
-        userDiscountCardEntity.setName(signUpRequestDTO.getName());
-        userDiscountCardEntity.setClientDiscount(0d);
-        userDiscountCardEntity.setAllSpentMoney(0d);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(signUpRequestDTO.getEmail());
-        userEntity.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
-        userEntity.setRoles(Roles.CLIENT);
-        userEntity.setUserDiscountCardEntity(userDiscountCardEntity);
-
-        userRepository.save(userEntity);
+        final UserDiscountCardEntity discountCard = createUserDiscountCard(signUpRequestDTO);
+        final UserEntity user = createUser(signUpRequestDTO, discountCard);
+        userRepository.save(user);
 
 //        return signIn(new SignInRequestDTO(signUpRequestDTO.getEmail(), signUpRequestDTO.getPassword()));
     }
 
     public SignInResponse signIn(final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, WrongPasswordException {
-        UserEntity userEntity = userRepository.findByEmail(signInRequestDTO.getEmail())
+        final UserEntity user = userRepository.findByEmail(signInRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
-        if (!passwordEncoder.matches(signInRequestDTO.getPassword(), (userEntity.getPassword())))
+        if (!passwordEncoder.matches(signInRequestDTO.getPassword(), (user.getPassword())))
             throw new WrongPasswordException("Wrong password");
 
 //        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequestDTO.getEmail(), signInRequestDTO.getPassword()));
 
-        return new SignInResponse(jwtUtil.generateToken(new User(userEntity.getEmail(), userEntity.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + userEntity.getRoles().name())))));
+        return new SignInResponse(jwtUtil.generateToken(new User(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getRoles().name())))));
+    }
+
+    private UserDiscountCardEntity createUserDiscountCard(final SignUpRequestDTO signUpRequestDTO){
+        final UserDiscountCardEntity userDiscountCardEntity = new UserDiscountCardEntity();
+        userDiscountCardEntity.setName(signUpRequestDTO.getName());
+        userDiscountCardEntity.setClientDiscount(0d);
+        userDiscountCardEntity.setAllSpentMoney(0d);
+
+        return userDiscountCardEntity;
+    }
+
+    private UserEntity createUser(final SignUpRequestDTO signUpRequestDTO, final UserDiscountCardEntity userDiscountCardEntity){
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(signUpRequestDTO.getEmail());
+        userEntity.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
+        userEntity.setRoles(Roles.CLIENT);
+        userEntity.setUserDiscountCardEntity(userDiscountCardEntity);
+
+        return userEntity;
     }
 
 }

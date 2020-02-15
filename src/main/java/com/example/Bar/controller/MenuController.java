@@ -34,7 +34,7 @@ public class MenuController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TextResponse addNewMenuItem(@Valid @RequestBody final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
-        return menuService.addNewMenuItem(addNewMenuItemRequestDTO);
+        return menuService.addMenuItem(addNewMenuItemRequestDTO);
     }
 
     @DeleteMapping("/{productId}")

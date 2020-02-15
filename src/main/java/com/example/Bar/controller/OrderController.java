@@ -20,8 +20,8 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TextResponse makeNewOrder(@Valid @RequestBody final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
-        return orderService.makeNewOrder(makeNewOrderRequestDTO);
+    public TextResponse makeOrder(@Valid @RequestBody final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
+        return orderService.makeOrder(makeNewOrderRequestDTO);
     }
 
     @PatchMapping

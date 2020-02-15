@@ -30,13 +30,10 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
 
-    public TextResponse addNewMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO) {
+    public TextResponse addMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO) {
 
         final MenuItemEntity menuItemEntity = new MenuItemEntity();
-        menuItemEntity.setName(addNewMenuItemRequestDTO.getName());
-        menuItemEntity.setCategory(addNewMenuItemRequestDTO.getCategory());
-        menuItemEntity.setDescription(addNewMenuItemRequestDTO.getDescription());
-        menuItemEntity.setPrice(addNewMenuItemRequestDTO.getPrice());
+        convertDtoToEntity(menuItemEntity, addNewMenuItemRequestDTO);
 
         menuItemRepository.save(menuItemEntity);
 
@@ -50,6 +47,13 @@ public class MenuService {
         menuItemRepository.delete(menuItemEntity);
 
         return new TextResponse("Позиция удалена");
+    }
+
+    private void convertDtoToEntity(final MenuItemEntity menuItemEntity, final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
+        menuItemEntity.setName(addNewMenuItemRequestDTO.getName());
+        menuItemEntity.setCategory(addNewMenuItemRequestDTO.getCategory());
+        menuItemEntity.setDescription(addNewMenuItemRequestDTO.getDescription());
+        menuItemEntity.setPrice(addNewMenuItemRequestDTO.getPrice());
     }
 
 }
