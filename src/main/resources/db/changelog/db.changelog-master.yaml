@@ -1,0 +1,440 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: add user table
+      author: denis
+      changes:
+      - createTable:
+          tableName: users
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: email
+              type: varchar(64)
+              constraints:
+                unique: true
+                nullable: false
+          - column:
+              name: password
+              type: varchar(512)
+              constraints:
+                nullable: false
+          - column:
+              name: role
+              type: enum('CLIENT', 'WAITER', 'ADMIN')
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into the user table
+      author: denis
+      changes:
+      - insert:
+          tableName: users
+          columns:
+          - column:
+              name: email
+              value: "client@gmail.com"
+          - column:
+              name: password
+              value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
+          - column:
+              name: role
+              value: 'CLIENT'
+
+  - changeSet:
+      id: create discount_card table
+      author: denis
+      changes:
+      - createTable:
+          tableName: discount_card
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: false
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar(64)
+              constraints:
+                nullable: false
+          - column:
+              name: client_discount
+              type: DECIMAL(3,2)
+              constraints:
+                nullable: false
+          - column:
+              name: all_spent_money
+              type: DECIMAL(8,2)
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into the discount_card table
+      author: denis
+      changes:
+      - insert:
+          tableName: discount_card
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: name
+              value: "Денис"
+          - column:
+              name: client_discount
+              value: 0.00
+          - column:
+              name: all_spent_money
+              value: 0.00
+
+  - changeSet:
+      id: create event table
+      author: denis
+      changes:
+      - createTable:
+          tableName: events
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: description
+              type: varchar(128)
+              constraints:
+                nullable: false
+          - column:
+              name: time
+              type: TIMESTAMP(2)
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into events table
+      author: denis
+      changes:
+      - insert:
+          tableName: events
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: name
+              value: "StandUp вечер"
+          - column:
+              name: description
+              value: "Много известных комиков"
+          - column:
+              name: time
+              value: '2020-03-04 20:00:00'
+
+  - changeSet:
+      id: create inventories table
+      author: denis
+      changes:
+      - createTable:
+          tableName: inventories
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: category
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: count
+              type: INT
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into inventories table
+      author: denis
+      changes:
+      - insert:
+          tableName: inventories
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: name
+              value: "Рюмка 50 мл"
+          - column:
+              name: category
+              value: "glass"
+          - column:
+              name: count
+              value: 23
+      - insert:
+          tableName: inventories
+          columns:
+          - column:
+              name: id
+              value: 2
+          - column:
+              name: name
+              value: "Стол"
+          - column:
+              name: category
+              value: "table"
+          - column:
+              name: count
+              value: 3
+
+  - changeSet:
+      id: create menu_items table
+      author: denis
+      changes:
+      - createTable:
+          tableName: menu_items
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar(64)
+              constraints:
+                nullable: false
+          - column:
+              name: category
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: description
+              type: varchar(128)
+              constraints:
+                nullable: false
+          - column:
+              name: price
+              type: DECIMAL(8,2)
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into menu_items
+      author: denis
+      changes:
+      - insert:
+          tableName: menu_items
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: name
+              value: "Zatecky Gus"
+          - column:
+              name: category
+              value: "beer"
+          - column:
+              name: description
+              value: "Светлый лагер с легким традиционным вкусом"
+          - column:
+              name: price
+              value: 5.00
+      - insert:
+          tableName: menu_items
+          columns:
+          - column:
+              name: id
+              value: 12
+          - column:
+              name: name
+              value: "Пепперони"
+          - column:
+              name: category
+              value: "pizza"
+          - column:
+              name: description
+              value: "Колбаска пепперони, сыр. Пицца 30см"
+          - column:
+              name: price
+              value: 15.00
+
+  - changeSet:
+      id: create orders table
+      author: denis
+      changes:
+      - createTable:
+          tableName: orders
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: table_number
+              type: INT
+              constraints:
+                nullable: false
+          - column:
+              name: time_open
+              type: TIMESTAMP(2)
+              constraints:
+                nullable: false
+          - column:
+              name: time_close
+              type: TIMESTAMP(2)
+              constraints:
+                nullable: true
+
+  - changeSet:
+      id: insert into orders table
+      author: denis
+      changes:
+      - insert:
+          tableName: orders
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: table_number
+              value: 2
+          - column:
+              name: time_open
+              value: '2020-03-14 20:00:00'
+          - column:
+              name: time_close
+              value: null
+
+  - changeSet:
+      id: create order_choice table
+      author: denis
+      changes:
+      - createTable:
+          tableName: order_choice
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: order_id
+              type: INT
+              constraints:
+                nullable: false
+          - column:
+              name: menu_item_id
+              type: INT
+              constraints:
+                nullable: false
+          - column:
+              name: count
+              type: INT
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into order_choice table
+      author: denis
+      changes:
+      - insert:
+          tableName: order_choice
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: order_id
+              value: 1
+          - column:
+              name: menu_item_id
+              value: 1
+          - column:
+              name: count
+              value: 5
+
+  - changeSet:
+      id: create reservations table
+      author: denis
+      changes:
+      - createTable:
+          tableName: reservations
+          columns:
+          - column:
+              name: id
+              type: INT
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: time
+              type: TIMESTAMP(2)
+              constraints:
+                nullable: false
+          - column:
+              name: table_number
+              type: INT
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: insert into reservations table
+      author: denis
+      changes:
+      - insert:
+          tableName: reservations
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: name
+              value: "Денис"
+          - column:
+              name: time
+              value: '2020-03-04 19:00:00'
+          - column:
+              name: table_number
+              value: 2

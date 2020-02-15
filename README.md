@@ -119,11 +119,18 @@ Response: `200 OK`
 ```json
 [
   {
-    "id" : 1,
-    "name" : "Zatecky Gus",
-    "category" : "beer",
-    "description" : "Светлый лагер с легким традиционным вкусом",
-    "price" : 5
+       "id" : 1,
+       "name" : "Zatecky Gus",
+       "category" : "beer",
+       "description" : "Светлый лагер с легким традиционным вкусом",
+       "price" : 5
+  },
+  {
+       "id" : 12,
+       "name" : "Пепперони",
+       "category" : "pizza",
+       "description" : "Колбаска пепперони, сыр. Пицца 30см",
+       "price" : 15
   }
 ]
 ```
@@ -166,7 +173,7 @@ Response: `201 CREATED`
 
 ```json
 { 
-  "response" : "Ваш столик №2" 
+  "response" : "Ваш столик №1" 
 }
 ```
 
@@ -286,6 +293,12 @@ Response: `200 OK`
     "name" : "Рюмка 50 мл",
     "category" : "glass",
     "count" : 23
+  },
+  {
+    "id" : 2,
+    "name" : "Стол",
+    "category" : "table",
+    "count" : 3
   }
 ]
 ```
@@ -298,8 +311,8 @@ Request:
 
 ```json
 {
-  "id" : 1,
-  "count" : 50
+  "id" : 2,
+  "count" : 5
 }
 ```
 
@@ -392,9 +405,9 @@ Request:
 
 ```json
   {
-    "name" : "Zatecky Gus",
-    "category" : "beer",
-    "description" : "Светлый лагер с легким традиционным вкусом",
+    "name" : "Бургер",
+    "category" : "burger",
+    "description" : "Большой и вкусный",
     "price" : 5
   }
 ```

@@ -43,6 +43,7 @@ public class AuthenticationService {
     }
 
     public SignInResponse signIn(final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, WrongPasswordException {
+
         final UserEntity user = userRepository.findByEmail(signInRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
@@ -51,7 +52,7 @@ public class AuthenticationService {
 
 //        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequestDTO.getEmail(), signInRequestDTO.getPassword()));
 
-        return new SignInResponse(jwtUtil.generateToken(new User(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getRoles().name())))));
+        return new SignInResponse(jwtUtil.generateToken(new User(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))));
     }
 
     private UserDiscountCardEntity createUserDiscountCard(final SignUpRequestDTO signUpRequestDTO){
@@ -67,7 +68,7 @@ public class AuthenticationService {
         final UserEntity userEntity = new UserEntity();
         userEntity.setEmail(signUpRequestDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
-        userEntity.setRoles(Roles.CLIENT);
+        userEntity.setRole(Roles.CLIENT);
         userEntity.setUserDiscountCardEntity(userDiscountCardEntity);
 
         return userEntity;

@@ -1,16 +1,13 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.entity.InventoryEntity;
+import com.example.Bar.repository.InventoryRepository;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -20,17 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class InventoryControllerTest extends AbstractControllerTest{
 
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
     @Test
     public void testGetInventoryIsOk() throws Exception{
         final String token = signIn(Roles.ADMIN);
-
-        final InventoryEntity inventoryEntity = new InventoryEntity();
-        inventoryEntity.setId(1);
-        inventoryEntity.setName("Рюмка 50 мл");
-        inventoryEntity.setCategory("glass");
-        inventoryEntity.setCount(23);
-
-        given(inventoryRepository.findAll()).willReturn(Collections.singletonList(inventoryEntity));
 
         mockMvc.perform(get("/inventories").header("Authorization", token))
                 .andExpect(status().isOk())
@@ -40,6 +32,12 @@ class InventoryControllerTest extends AbstractControllerTest{
                         "  \"name\" : \"Рюмка 50 мл\",\n" +
                         "  \"category\" : \"glass\",\n" +
                         "  \"count\" : 23\n" +
+                        "},\n" +
+                        "{\n" +
+                        "  \"id\" : 2,\n" +
+                        "  \"name\" : \"Стол\",\n" +
+                        "  \"category\" : \"table\",\n" +
+                        "  \"count\" : 3\n" +
                         "}\n" +
                         "]"));
     }
@@ -65,19 +63,22 @@ class InventoryControllerTest extends AbstractControllerTest{
     public void testChangeInventoryCountIsOk() throws Exception{
         final String token = signIn(Roles.ADMIN);
 
-        final InventoryEntity inventoryEntity = new InventoryEntity();
-        inventoryEntity.setId(1);
-        inventoryEntity.setName("Рюмка 50 мл");
-        inventoryEntity.setCategory("glass");
-        inventoryEntity.setCount(23);
-
-        given(inventoryRepository.findById(1)).willReturn(Optional.of(inventoryEntity));
+        mockMvc.perform(patch("/inventories").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"id\" : 2,\n" +
+                        "  \"count\" : 5\n" +
+                        "}"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\n" +
+                        "  \"response\" : \"Сохранено\"\n" +
+                        "}"));
 
         mockMvc.perform(patch("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"id\" : 1,\n" +
-                        "  \"count\" : 50\n" +
+                        "  \"id\" : 2,\n" +
+                        "  \"count\" : 3\n" +
                         "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
@@ -92,8 +93,8 @@ class InventoryControllerTest extends AbstractControllerTest{
         mockMvc.perform(patch("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"id\" : 1,\n" +
-                        "  \"count\" : 50\n" +
+                        "  \"id\" : 2,\n" +
+                        "  \"count\" : 5\n" +
                         "}"))
                 .andExpect(status().isForbidden());
     }
@@ -127,6 +128,8 @@ class InventoryControllerTest extends AbstractControllerTest{
                 .andExpect(content().json("{\n" +
                         "  \"response\" : \"Инвентарь добавлен\"\n" +
                         "}"));
+
+        inventoryRepository.delete(inventoryRepository.findByCategory("wineglass").get());
     }
 
     @Test
@@ -161,14 +164,6 @@ class InventoryControllerTest extends AbstractControllerTest{
     @Test
     public void testDeleteInventoryIsOk() throws Exception{
         final String token = signIn(Roles.ADMIN);
-
-        final InventoryEntity inventoryEntity = new InventoryEntity();
-        inventoryEntity.setId(1);
-        inventoryEntity.setName("Рюмка 50 мл");
-        inventoryEntity.setCategory("glass");
-        inventoryEntity.setCount(23);
-
-        given(inventoryRepository.findById(1)).willReturn(Optional.of(inventoryEntity));
 
         mockMvc.perform(delete("/inventories/1").header("Authorization", token))
                 .andExpect(status().isOk())

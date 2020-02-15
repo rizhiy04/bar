@@ -17,9 +17,9 @@ public class UserEntity extends BaseEntity{
     @Column(name = "password")
     private String password;
 
-    @Column(name = "roles")
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Roles roles;
+    private Roles role;
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")

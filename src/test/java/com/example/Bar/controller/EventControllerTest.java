@@ -1,18 +1,13 @@
 package com.example.Bar.controller;
 
-import com.example.Bar.entity.EventEntity;
+import com.example.Bar.repository.EventRepository;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,16 +19,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class EventControllerTest extends AbstractControllerTest {
 
+    @Autowired
+    private EventRepository eventRepository;
+
     @Test
     public void testGetEventsIsOk() throws Exception{
-
-        final EventEntity eventEntity = new EventEntity();
-        eventEntity.setId(1);
-        eventEntity.setName("StandUp вечер");
-        eventEntity.setDescription("Много известных комиков");
-        eventEntity.setTime(LocalDateTime.of(2020, 3,4,20,0));
-
-        given(eventRepository.findAllByTimeAfterOrderByIdAsc(any(LocalDateTime.class))).willReturn(Collections.singletonList(eventEntity));
 
         mockMvc.perform(get("/events"))
                 .andExpect(status().isOk())
@@ -62,6 +52,8 @@ class EventControllerTest extends AbstractControllerTest {
                 .andExpect(content().json("{\n" +
                         "  \"response\" : \"Мероприятие добавлено\"\n" +
                         "}"));
+
+        eventRepository.delete(eventRepository.findAll().get(1));
     }
 
     @Test
@@ -96,14 +88,6 @@ class EventControllerTest extends AbstractControllerTest {
     @Test
     public void testDeleteEventIsOk() throws Exception{
         final String token = signIn(Roles.ADMIN);
-
-        final EventEntity eventEntity = new EventEntity();
-        eventEntity.setId(1);
-        eventEntity.setName("StandUp вечер");
-        eventEntity.setDescription("Много известных комиков");
-        eventEntity.setTime(LocalDateTime.of(2020, 3, 4, 20, 0));
-
-        given(eventRepository.findById(1)).willReturn(Optional.of(eventEntity));
 
         mockMvc.perform(delete("/events/1").header("Authorization", token))
                 .andExpect(status().isOk())

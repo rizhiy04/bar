@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "inventory")
+@Table(name = "inventories")
 @Data
 public class InventoryEntity extends BaseEntity{
 
