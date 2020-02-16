@@ -1,15 +1,11 @@
 package com.example.Bar.service;
 
-import com.example.Bar.dto.event.AddNewEventRequestDTO;
-import com.example.Bar.dto.event.EventDTO;
-import com.example.Bar.entity.EventEntity;
 import com.example.Bar.exception.NoSuchElementException;
 import com.example.Bar.repository.EventRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
