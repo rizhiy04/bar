@@ -58,7 +58,7 @@ databaseChangeLog:
           - column:
               name: id
               type: INT
-              autoIncrement: false
+              autoIncrement: true
               constraints:
                 primaryKey: true
                 nullable: false
@@ -75,6 +75,11 @@ databaseChangeLog:
           - column:
               name: all_spent_money
               type: DECIMAL(8,2)
+              constraints:
+                nullable: false
+          - column:
+              name: user_id
+              type: INT
               constraints:
                 nullable: false
 
@@ -97,6 +102,9 @@ databaseChangeLog:
           - column:
               name: all_spent_money
               value: 0.00
+          - column:
+              name: user_id
+              value: 1
 
   - changeSet:
       id: create event table

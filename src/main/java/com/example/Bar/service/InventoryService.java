@@ -36,11 +36,7 @@ public class InventoryService {
     }
 
     public TextResponse addInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
-
-        final InventoryEntity inventoryEntity = new InventoryEntity();
-        convertDtoToEntity(inventoryEntity, addNewInventoryRequestDTO);
-
-        inventoryRepository.save(inventoryEntity);
+        inventoryRepository.save(convertDtoToEntity(addNewInventoryRequestDTO));
 
         return new TextResponse("Инвентарь добавлен");
     }
@@ -54,10 +50,13 @@ public class InventoryService {
         return new TextResponse("Инвентарь удален");
     }
 
-    private void convertDtoToEntity(final InventoryEntity inventoryEntity, final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+    private InventoryEntity convertDtoToEntity(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+        final InventoryEntity inventoryEntity = new InventoryEntity();
         inventoryEntity.setName(addNewInventoryRequestDTO.getName());
         inventoryEntity.setCategory(addNewInventoryRequestDTO.getCategory());
         inventoryEntity.setCount(addNewInventoryRequestDTO.getCount());
+
+        return inventoryEntity;
     }
 
 }

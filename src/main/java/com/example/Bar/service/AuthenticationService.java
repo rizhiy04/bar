@@ -29,8 +29,7 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
 
-    public void signUp(final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
-
+    public SignInResponse signUp(final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
         if (userRepository.findByEmail(signUpRequestDTO.getEmail()).isPresent()){
             throw new SuchUserAlreadyExistException("User already exist");
         }
@@ -39,11 +38,10 @@ public class AuthenticationService {
         final UserEntity user = createUser(signUpRequestDTO, discountCard);
         userRepository.save(user);
 
-//        return signIn(new SignInRequestDTO(signUpRequestDTO.getEmail(), signUpRequestDTO.getPassword()));
+        return signIn(new SignInRequestDTO(signUpRequestDTO.getEmail(), signUpRequestDTO.getPassword()));
     }
 
     public SignInResponse signIn(final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, WrongPasswordException {
-
         final UserEntity user = userRepository.findByEmail(signInRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
@@ -70,6 +68,7 @@ public class AuthenticationService {
         userEntity.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
         userEntity.setRole(Roles.CLIENT);
         userEntity.setUserDiscountCardEntity(userDiscountCardEntity);
+        userDiscountCardEntity.setUserEntity(userEntity);
 
         return userEntity;
     }

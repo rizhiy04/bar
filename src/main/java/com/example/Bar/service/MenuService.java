@@ -31,11 +31,7 @@ public class MenuService {
     }
 
     public TextResponse addMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO) {
-
-        final MenuItemEntity menuItemEntity = new MenuItemEntity();
-        convertDtoToEntity(menuItemEntity, addNewMenuItemRequestDTO);
-
-        menuItemRepository.save(menuItemEntity);
+        menuItemRepository.save(convertDtoToEntity(addNewMenuItemRequestDTO));
 
         return new TextResponse("Позиция добавлена");
     }
@@ -49,11 +45,14 @@ public class MenuService {
         return new TextResponse("Позиция удалена");
     }
 
-    private void convertDtoToEntity(final MenuItemEntity menuItemEntity, final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
+    private MenuItemEntity convertDtoToEntity(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
+        final MenuItemEntity menuItemEntity = new MenuItemEntity();
         menuItemEntity.setName(addNewMenuItemRequestDTO.getName());
         menuItemEntity.setCategory(addNewMenuItemRequestDTO.getCategory());
         menuItemEntity.setDescription(addNewMenuItemRequestDTO.getDescription());
         menuItemEntity.setPrice(addNewMenuItemRequestDTO.getPrice());
+
+        return menuItemEntity;
     }
 
 }

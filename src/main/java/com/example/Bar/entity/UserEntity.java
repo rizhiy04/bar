@@ -21,7 +21,6 @@ public class UserEntity extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "userEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private UserDiscountCardEntity userDiscountCardEntity;
 }

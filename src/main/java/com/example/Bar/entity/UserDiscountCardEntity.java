@@ -19,6 +19,7 @@ public class UserDiscountCardEntity extends BaseEntity {
     @Column(name = "all_spent_money")
     private Double allSpentMoney;
 
-    @OneToOne(mappedBy = "userDiscountCardEntity")
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity userEntity;
 }

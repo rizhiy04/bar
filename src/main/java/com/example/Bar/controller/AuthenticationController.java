@@ -21,8 +21,8 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@Valid @RequestBody final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException {
-        authenticationService.signUp(signUpRequestDTO);
+    public SignInResponse signUp(@Valid @RequestBody final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException {
+        return authenticationService.signUp(signUpRequestDTO);
     }
 
     @PostMapping("/sign-in")

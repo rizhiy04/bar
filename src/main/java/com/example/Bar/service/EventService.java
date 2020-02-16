@@ -20,18 +20,13 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public List<EventDTO> getEvents(){
-        final LocalDateTime now = LocalDateTime.now();
-        return eventRepository.findAllByTimeAfterOrderByIdAsc(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute())).stream().map(
+        return eventRepository.findAllByTimeAfterOrderByIdAsc(LocalDateTime.now()).stream().map(
                 event -> new EventDTO(event.getId(), event.getName(), event.getDescription(), event.getTime()))
                 .collect(Collectors.toList());
     }
 
     public TextResponse addEvent(final AddNewEventRequestDTO addNewEventRequestDTO){
-
-        final EventEntity eventEntity = new EventEntity();
-        convertDtoToEntity(eventEntity, addNewEventRequestDTO);
-
-        eventRepository.save(eventEntity);
+        eventRepository.save(convertDtoToEntity(addNewEventRequestDTO));
 
         return new TextResponse("Мероприятие добавлено");
     }
@@ -45,10 +40,13 @@ public class EventService {
         return new TextResponse("Мероприятие удалено");
     }
 
-    private void convertDtoToEntity(final EventEntity eventEntity, final AddNewEventRequestDTO addNewEventRequestDTO){
+    private EventEntity convertDtoToEntity(final AddNewEventRequestDTO addNewEventRequestDTO){
+        final EventEntity eventEntity = new EventEntity();
         eventEntity.setName(addNewEventRequestDTO.getEventName());
         eventEntity.setDescription(addNewEventRequestDTO.getDescription());
         eventEntity.setTime(addNewEventRequestDTO.getDate());
+
+        return eventEntity;
     }
 
 }

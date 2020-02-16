@@ -25,16 +25,12 @@ public class OrderService {
     private final UserDiscountCardRepository userDiscountCardRepository;
 
     public TextResponse makeOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
-        final OrderEntity orderEntity = new OrderEntity();
-        makeOrderEntity(orderEntity, makeNewOrderRequestDTO);
-
-        orderRepository.save(orderEntity);
+        orderRepository.save(makeOrderEntity(makeNewOrderRequestDTO));
 
         return new TextResponse("Заказ оформлен");
     }
 
     public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
-
         final OrderEntity orderEntity = findOrderToClose(closeOrderRequestDTO);
         double orderPrice = calculatePrice(orderEntity);
 
@@ -48,7 +44,8 @@ public class OrderService {
         return new TextResponse("Заказ закрыт, к оплате " + orderPrice + "р");
     }
 
-    private void makeOrderEntity(final OrderEntity orderEntity, final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException{
+    private OrderEntity makeOrderEntity(final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException{
+        final OrderEntity orderEntity = new OrderEntity();
         orderEntity.setTableNumber(makeNewOrderRequestDTO.getTableNumber());
         orderEntity.setTimeOpen(LocalDateTime.now());
 
@@ -58,6 +55,8 @@ public class OrderService {
             orderChoiceEntity.setCount(order.getCount());
             orderEntity.getOrderChoiceEntities().add(orderChoiceEntity);
         }
+
+        return orderEntity;
     }
 
     private OrderEntity findOrderToClose(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{

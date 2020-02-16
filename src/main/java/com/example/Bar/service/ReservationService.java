@@ -29,8 +29,7 @@ public class ReservationService {
     private final OrderRepository orderRepository;
 
     public List<ReservationDTO> getReservations(){
-        final LocalDateTime now = LocalDateTime.now();
-        return reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute())).stream().map(
+        return reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.now()).stream().map(
                 reservation -> new ReservationDTO(reservation.getId(), reservation.getName(), reservation.getTableNumber(), reservation.getTime()))
                 .collect(Collectors.toList());
     }
@@ -38,7 +37,6 @@ public class ReservationService {
     public FreeTablesDTO getFreeTables(final Integer hours) throws NoSuchElementException{
         final List<OrderEntity> unclosedOrders = getUnclosedOrders();
         final List<ReservationEntity> reservation = getNearestReservation(hours);
-
         final Set<Integer> unfreeTables = getUnfreeTables(unclosedOrders, reservation);
 
         return getFreeTables(unfreeTables, getTablesCount());
