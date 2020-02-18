@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @Service
@@ -79,11 +80,8 @@ public class ReservationService {
     private FreeTablesDTO getFreeTables(final Set<Integer> unfreeTables, final Integer tablesCount){
         final FreeTablesDTO freeTablesDTO = new FreeTablesDTO(new ArrayList<>());
 
-        for (int i = 1; i <= tablesCount; i++){
-            if (!unfreeTables.contains(i)){
-                freeTablesDTO.getTableNumbers().add(i);
-            }
-        }
+        IntStream.rangeClosed(1, tablesCount).filter(i -> !unfreeTables.contains(i))
+                .forEach(freeTablesDTO.getTableNumbers()::add);
 
         return freeTablesDTO;
     }
@@ -105,12 +103,8 @@ public class ReservationService {
         final List<Integer> reservedTable = new ArrayList<>();
         reservedTables.forEach(reservationEntity -> reservedTable.add(reservationEntity.getTableNumber()));
 
-        for (int i = 1; i<= tablesCount; i++){
-            if (!reservedTable.contains(i)){
-                return i;
-            }
-        }
+        return IntStream.rangeClosed(1, tablesCount).filter(i -> !reservedTable.contains(i))
+                .limit(1).findFirst().orElse(0);
 
-        return null;
     }
 }

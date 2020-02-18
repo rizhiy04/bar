@@ -39,6 +39,9 @@ databaseChangeLog:
           tableName: users
           columns:
           - column:
+              name: id
+              value: 1
+          - column:
               name: email
               value: "client@gmail.com"
           - column:
@@ -47,6 +50,36 @@ databaseChangeLog:
           - column:
               name: role
               value: 'CLIENT'
+      - insert:
+          tableName: users
+          columns:
+          - column:
+              name: id
+              value: 2
+          - column:
+              name: email
+              value: "waiter@gmail.com"
+          - column:
+              name: password
+              value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
+          - column:
+              name: role
+              value: 'WAITER'
+      - insert:
+          tableName: users
+          columns:
+          - column:
+              name: id
+              value: 3
+          - column:
+              name: email
+              value: "admin@gmail.com"
+          - column:
+              name: password
+              value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
+          - column:
+              name: role
+              value: 'ADMIN'
 
   - changeSet:
       id: create discount_card table
@@ -346,6 +379,21 @@ databaseChangeLog:
           - column:
               name: time_close
               value: null
+      - insert:
+          tableName: orders
+          columns:
+          - column:
+              name: id
+              value: 3
+          - column:
+              name: table_number
+              value: 2
+          - column:
+              name: time_open
+              value: '2020-01-14 20:00:00'
+          - column:
+              name: time_close
+              value: '2020-01-14 22:00:00'
 
   - changeSet:
       id: create order_choice table
@@ -390,6 +438,21 @@ databaseChangeLog:
           - column:
               name: order_id
               value: 1
+          - column:
+              name: menu_item_id
+              value: 1
+          - column:
+              name: count
+              value: 5
+      - insert:
+          tableName: order_choice
+          columns:
+          - column:
+              name: id
+              value: 3
+          - column:
+              name: order_id
+              value: 3
           - column:
               name: menu_item_id
               value: 1

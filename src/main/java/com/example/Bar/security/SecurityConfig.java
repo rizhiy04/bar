@@ -23,17 +23,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/inventories").hasRole(Roles.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/inventories", "/orders/**").hasRole(Roles.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/events", "/inventories", "/menu").hasRole(Roles.ADMIN.name())
                 .antMatchers(HttpMethod.PATCH, "/inventories").hasRole(Roles.ADMIN.name())
                 .antMatchers(HttpMethod.DELETE, "/events/*", "/inventories/*", "/menu/*").hasRole(Roles.ADMIN.name())
 
-                .antMatchers(HttpMethod.GET, "/reservation/**").hasRole(Roles.WAITER.name())
-                .antMatchers(HttpMethod.POST, "/order").hasRole(Roles.WAITER.name())
-                .antMatchers(HttpMethod.PATCH, "/order").hasRole(Roles.WAITER.name())
+                .antMatchers(HttpMethod.GET, "/reservations/**").hasRole(Roles.WAITER.name())
+                .antMatchers(HttpMethod.POST, "/orders").hasRole(Roles.WAITER.name())
+                .antMatchers(HttpMethod.PATCH, "/orders").hasRole(Roles.WAITER.name())
+
+                .antMatchers(HttpMethod.GET, "/discount-cards").authenticated()
 
                 .antMatchers(HttpMethod.GET, "/menu/*", "/events").permitAll()
-                .antMatchers(HttpMethod.POST, "/reservation", "/sign-up", "/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/reservations", "/sign-up", "/sign-in").permitAll()
 
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

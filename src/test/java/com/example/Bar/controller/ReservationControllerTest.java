@@ -19,7 +19,7 @@ class ReservationControllerTest extends AbstractControllerTest{
     @Test
     public void testReserveTableIsCreated() throws Exception{
 
-        mockMvc.perform(post("/reservation")
+        mockMvc.perform(post("/reservations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"name\" : \"Денис\",\n" +
@@ -37,7 +37,7 @@ class ReservationControllerTest extends AbstractControllerTest{
     public void testGetReservationIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-        mockMvc.perform(get("/reservation").header("Authorization", token))
+        mockMvc.perform(get("/reservations").header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
@@ -53,7 +53,7 @@ class ReservationControllerTest extends AbstractControllerTest{
     public void testGetReservationAccessDeniedForClient() throws Exception{
         final String token = signIn(Roles.CLIENT);
 
-        mockMvc.perform(get("/reservation").header("Authorization", token))
+        mockMvc.perform(get("/reservations").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 
@@ -61,7 +61,7 @@ class ReservationControllerTest extends AbstractControllerTest{
     public void testGetFreeTablesIsOk() throws Exception{
         final String token = signIn(Roles.WAITER);
 
-        mockMvc.perform(get("/reservation/free/2").header("Authorization", token))
+        mockMvc.perform(get("/reservations/free/2").header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "  \"tableNumbers\" : [1, 3]\n" +
@@ -72,7 +72,7 @@ class ReservationControllerTest extends AbstractControllerTest{
     public void testGetFreeTablesAccessDeniedForClient() throws Exception{
         final String token = signIn(Roles.CLIENT);
 
-        mockMvc.perform(get("/reservation/free/2").header("Authorization", token))
+        mockMvc.perform(get("/reservations/free/2").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 

@@ -3,6 +3,8 @@ package com.example.Bar.controller;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.order.CloseOrderRequestDTO;
 import com.example.Bar.dto.order.MakeNewOrderRequestDTO;
+import com.example.Bar.dto.order.OrderDTO;
+import com.example.Bar.dto.order.RevenueRequest;
 import com.example.Bar.exception.NoSuchElementException;
 import com.example.Bar.service.OrderService;
 import lombok.AllArgsConstructor;
@@ -10,13 +12,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<OrderDTO> getOrders(){
+        return orderService.getOrders();
+    }
+
+    @GetMapping("/revenue")
+    @ResponseStatus(HttpStatus.OK)
+    public TextResponse getRevenueByTime(@Valid @RequestBody final RevenueRequest revenueRequest){
+        return orderService.getRevenueByTime(revenueRequest);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

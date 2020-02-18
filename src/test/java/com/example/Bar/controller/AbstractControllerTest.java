@@ -8,15 +8,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,23 +28,17 @@ public class AbstractControllerTest {
     protected PasswordEncoder passwordEncoder;
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
+    @Autowired
     private UserRepository userRepository;
 
     protected String signIn(final Roles role) throws Exception{
-
-        final UserEntity userEntity = new UserEntity();
-        userEntity.setEmail("example@gmail.com");
-        userEntity.setPassword(passwordEncoder.encode("qwerty"));
-        userEntity.setRole(role);
-
-        given(userRepository.findByEmail("example@gmail.com")).willReturn(Optional.of(userEntity));
+        final UserEntity userEntity = userRepository.findAllByRole(role).stream().findAny()
+                .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
         final String response = mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"email\" : \"example@gmail.com\",\n" +
+                        "  \"email\" : \"" + userEntity.getEmail() + "\",\n" +
                         "  \"password\" : \"qwerty\"\n" +
                         "}"))
                 .andExpect(status().isOk())
