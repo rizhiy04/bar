@@ -1,0 +1,21 @@
+version: "3"
+services:
+  bar:
+    image: bar
+    ports:
+    - "8080:8080"
+    networks:
+    - newNet
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    networks:
+    - newNet
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=bar
+
+networks:
+  newNet:
