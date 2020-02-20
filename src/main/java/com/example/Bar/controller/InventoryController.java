@@ -6,6 +6,7 @@ import com.example.Bar.dto.inventory.ChangeInventoryCountRequestDTO;
 import com.example.Bar.dto.inventory.InventoryDTO;
 import com.example.Bar.exception.NoSuchElementException;
 import com.example.Bar.service.InventoryService;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,31 +17,63 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/inventories")
+@Api(value = "Inventory system")
 public class InventoryController {
 
     private final InventoryService inventoryService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "View inventories", notes = "Use this method, if you want to view inventories")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully get inventories"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
     public List<InventoryDTO> getInventories(){
         return inventoryService.getInventories();
     }
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public TextResponse changeInventoryCount(@Valid @RequestBody final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws NoSuchElementException {
+    @ApiOperation(value = "Change inventory count", notes = "Use this method, if you want to change inventory count")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully change inventory count"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
+    public TextResponse changeInventoryCount(@ApiParam(value = "Change inventory count data", required = true)
+            @Valid @RequestBody final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws NoSuchElementException {
         return inventoryService.changeInventoryCount(changeInventoryCountRequestDTO);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TextResponse addInventory(@Valid @RequestBody final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
+    @ApiOperation(value = "Add new inventory", notes = "Use this method, if you want to add new inventory")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully add inventory"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
+    public TextResponse addInventory(@ApiParam(value = "Add new inventory data", required = true)
+            @Valid @RequestBody final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
         return inventoryService.addInventory(addNewInventoryRequestDTO);
     }
 
     @DeleteMapping("/{inventoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public TextResponse deleteInventory(@PathVariable("inventoryId") final Integer inventoryId) throws NoSuchElementException{
+    @ApiOperation(value = "Delete inventory", notes = "Use this method, if you want to delete inventory")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully delete inventory"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
+    public TextResponse deleteInventory(@ApiParam(value = "Inventory id", required = true)
+            @PathVariable("inventoryId") final Integer inventoryId) throws NoSuchElementException{
         return inventoryService.deleteInventory(inventoryId);
     }
 }
