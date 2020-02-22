@@ -1,21 +1,27 @@
 version: "3"
 services:
   bar:
-    image: bar
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
     ports:
     - "8080:8080"
     networks:
-    - newNet
+    - barNetwork
     depends_on:
       - mysqldb
 
   mysqldb:
     image: mysql:8
+    restart: always
     networks:
-    - newNet
+    - barNetwork
     environment:
     - MYSQL_ROOT_PASSWORD=root
     - MYSQL_DATABASE=bar
+    volumes:
+    - /opt/mysql/data:/var/lib/mysql
 
 networks:
-  newNet:
+  barNetwork:
