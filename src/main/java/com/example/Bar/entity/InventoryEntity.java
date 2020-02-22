@@ -17,6 +17,6 @@ public class InventoryEntity extends BaseEntity{
     @Column(name = "category")
     private String category;
 
-    @Column(name = "count")
-    private Integer count;
+    @Column(name = "amount")
+    private Integer amount;
 }

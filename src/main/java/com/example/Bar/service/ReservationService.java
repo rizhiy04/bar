@@ -1,5 +1,6 @@
 package com.example.Bar.service;
 
+import com.example.Bar.converter.ReservationConverter;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.reservation.FreeTablesDTO;
 import com.example.Bar.dto.reservation.ReservationDTO;
@@ -28,17 +29,17 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final InventoryRepository inventoryRepository;
     private final OrderRepository orderRepository;
+    private final ReservationConverter reservationConverter;
 
     public List<ReservationDTO> getReservations(){
-        return reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.now()).stream().map(
-                reservation -> new ReservationDTO(reservation.getId(), reservation.getName(), reservation.getTableNumber(), reservation.getTime()))
-                .collect(Collectors.toList());
+        return reservationRepository.findAllByTimeAfterOrderById(LocalDateTime.now()).stream()
+                .map(reservationConverter::convertToDTO).collect(Collectors.toList());
     }
 
     public FreeTablesDTO getFreeTables(final Integer hours) throws NoSuchElementException{
-        final List<OrderEntity> unclosedOrders = getUnclosedOrders();
-        final List<ReservationEntity> reservation = getNearestReservation(hours);
-        final Set<Integer> unfreeTables = getUnfreeTables(unclosedOrders, reservation);
+        final List<OrderEntity> unclosedOrders = orderRepository.findAllByTimeCloseIsNull();
+        final List<ReservationEntity> nearestReservation = getNearestReservation(hours);
+        final Set<Integer> unfreeTables = getUnfreeTables(unclosedOrders, nearestReservation);
 
         return getFreeTables(unfreeTables, getTablesCount());
     }
@@ -50,26 +51,24 @@ public class ReservationService {
         if (reservedTables.size() == tablesCount)
             return new TextResponse("Свободных мест на это время нет");
 
-        final ReservationEntity reservation = makeReservation(reservedTables, tablesCount, reserve);
+        final ReservationEntity reservation = getReservation(reservedTables, tablesCount, reserve);
         reservationRepository.save(reservation);
 
         return new TextResponse("Ваш столик №" + reservation.getTableNumber());
     }
 
     private Integer getTablesCount() throws NoSuchElementException{
-        return inventoryRepository.findByCategory("table").orElseThrow(() -> new NoSuchElementException("Tables don't exist")).getCount();
-    }
-
-    private List<OrderEntity> getUnclosedOrders(){
-        return orderRepository.findAllByTimeCloseIsNull();
+        return inventoryRepository.findByCategory("table")
+                .orElseThrow(() -> new NoSuchElementException("Tables don't exist")).getAmount();
     }
 
     private List<ReservationEntity> getNearestReservation(final Integer hours){
         final LocalDateTime now = LocalDateTime.now();
-        return reservationRepository.findAllByTimeAfterAndTimeBefore(LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute()), now.plusHours(hours));
+        return reservationRepository.findAllByTimeAfterAndTimeBefore(now, now.plusHours(hours));
     }
 
-    private Set<Integer> getUnfreeTables(final List<OrderEntity> unclosedOrders, final List<ReservationEntity> reservation){
+    private Set<Integer> getUnfreeTables(final List<OrderEntity> unclosedOrders,
+                                         final List<ReservationEntity> reservation){
         final Set<Integer> unfreeTables = new HashSet<>();
         unclosedOrders.forEach(orderEntity -> unfreeTables.add(orderEntity.getTableNumber()));
         reservation.forEach(reservationEntity -> unfreeTables.add(reservationEntity.getTableNumber()));
@@ -90,7 +89,8 @@ public class ReservationService {
         return reservationRepository.findAllByTimeAfterAndTimeBefore(time.minusHours(3), time.plusHours(3));
     }
 
-    private ReservationEntity makeReservation(final List<ReservationEntity> reservedTables, final Integer tablesCount, final ReservationRequestDTO reservationRequestDTO){
+    private ReservationEntity getReservation(final List<ReservationEntity> reservedTables, final Integer tablesCount,
+                                             final ReservationRequestDTO reservationRequestDTO){
         final ReservationEntity reservation = new ReservationEntity();
         reservation.setTableNumber(findFreeTable(reservedTables, tablesCount));
         reservation.setName(reservationRequestDTO.getName());

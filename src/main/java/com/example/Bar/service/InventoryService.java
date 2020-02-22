@@ -1,5 +1,6 @@
 package com.example.Bar.service;
 
+import com.example.Bar.converter.InventoryConverter;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.inventory.AddNewInventoryRequestDTO;
 import com.example.Bar.dto.inventory.ChangeInventoryCountRequestDTO;
@@ -18,25 +19,26 @@ import java.util.stream.Collectors;
 public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
+    private final InventoryConverter inventoryConverter;
 
     public List<InventoryDTO> getInventories(){
-        return inventoryRepository.findAll().stream().map(
-                inventoryEntity -> new InventoryDTO(inventoryEntity.getId(), inventoryEntity.getName(), inventoryEntity.getCategory(), inventoryEntity.getCount()))
+        return inventoryRepository.findAll().stream().map(inventoryConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public TextResponse changeInventoryCount(final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws NoSuchElementException {
-        final InventoryEntity inventoryEntity = inventoryRepository.findById(changeInventoryCountRequestDTO.getId())
+    public TextResponse changeInventoryCount(final ChangeInventoryCountRequestDTO inventoryDTO)
+            throws NoSuchElementException {
+        final InventoryEntity inventoryEntity = inventoryRepository.findById(inventoryDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException("Such inventoryEntity doesn't exist"));
 
-        inventoryEntity.setCount(changeInventoryCountRequestDTO.getCount());
+        inventoryEntity.setAmount(inventoryDTO.getCount());
         inventoryRepository.save(inventoryEntity);
 
         return new TextResponse("Сохранено");
     }
 
-    public TextResponse addInventory(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
-        inventoryRepository.save(convertDtoToEntity(addNewInventoryRequestDTO));
+    public TextResponse addInventory(final AddNewInventoryRequestDTO inventoryDTO){
+        inventoryRepository.save(inventoryConverter.convertToEntity(inventoryDTO));
 
         return new TextResponse("Инвентарь добавлен");
     }
@@ -48,15 +50,6 @@ public class InventoryService {
         inventoryRepository.delete(inventoryEntity);
 
         return new TextResponse("Инвентарь удален");
-    }
-
-    private InventoryEntity convertDtoToEntity(final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
-        final InventoryEntity inventoryEntity = new InventoryEntity();
-        inventoryEntity.setName(addNewInventoryRequestDTO.getName());
-        inventoryEntity.setCategory(addNewInventoryRequestDTO.getCategory());
-        inventoryEntity.setCount(addNewInventoryRequestDTO.getCount());
-
-        return inventoryEntity;
     }
 
 }

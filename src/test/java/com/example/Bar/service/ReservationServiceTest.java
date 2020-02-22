@@ -40,7 +40,7 @@ class ReservationServiceTest extends AbstractServiceTest{
         inventoryEntity.setId(1);
         inventoryEntity.setName("Table");
         inventoryEntity.setCategory("table");
-        inventoryEntity.setCount(1);
+        inventoryEntity.setAmount(1);
 
         return inventoryEntity;
     }

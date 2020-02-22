@@ -1,5 +1,6 @@
 package com.example.Bar.service;
 
+import com.example.Bar.converter.MenuItemConverter;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.menuItem.AddNewMenuItemRequestDTO;
 import com.example.Bar.dto.menuItem.MenuItemDTO;
@@ -17,21 +18,20 @@ import java.util.stream.Collectors;
 public class MenuService {
 
     private final MenuItemRepository menuItemRepository;
+    private final MenuItemConverter menuItemConverter;
 
     public List<MenuItemDTO> getMenu() {
-        return menuItemRepository.findAll().stream().map(
-                menuItem -> new MenuItemDTO(menuItem.getId(), menuItem.getName(), menuItem.getCategory(), menuItem.getDescription(), menuItem.getPrice()))
+        return menuItemRepository.findAll().stream().map(menuItemConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public List<MenuItemDTO> getMenuByCategory(final String category) {
-        return menuItemRepository.findAllByCategory(category).stream().map(
-                menuItem -> new MenuItemDTO(menuItem.getId(), menuItem.getName(), menuItem.getCategory(), menuItem.getDescription(), menuItem.getPrice()))
+        return menuItemRepository.findAllByCategory(category).stream().map(menuItemConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public TextResponse addMenuItem(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO) {
-        menuItemRepository.save(convertDtoToEntity(addNewMenuItemRequestDTO));
+    public TextResponse addMenuItem(final AddNewMenuItemRequestDTO menuItemDTO) {
+        menuItemRepository.save(menuItemConverter.convertToEntity(menuItemDTO));
 
         return new TextResponse("Позиция добавлена");
     }
@@ -43,16 +43,6 @@ public class MenuService {
         menuItemRepository.delete(menuItemEntity);
 
         return new TextResponse("Позиция удалена");
-    }
-
-    private MenuItemEntity convertDtoToEntity(final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
-        final MenuItemEntity menuItemEntity = new MenuItemEntity();
-        menuItemEntity.setName(addNewMenuItemRequestDTO.getName());
-        menuItemEntity.setCategory(addNewMenuItemRequestDTO.getCategory());
-        menuItemEntity.setDescription(addNewMenuItemRequestDTO.getDescription());
-        menuItemEntity.setPrice(addNewMenuItemRequestDTO.getPrice());
-
-        return menuItemEntity;
     }
 
 }

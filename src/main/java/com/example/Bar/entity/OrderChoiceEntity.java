@@ -17,6 +17,6 @@ public class OrderChoiceEntity extends BaseEntity {
     @JoinColumn(name = "menu_item_id")
     private MenuItemEntity menuItemEntity;
 
-    @Column(name = "count")
-    private Integer count;
+    @Column(name = "amount")
+    private Integer amount;
 }

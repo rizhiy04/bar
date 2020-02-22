@@ -1,5 +1,6 @@
 package com.example.Bar.service;
 
+import com.example.Bar.converter.EventConverter;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.event.AddNewEventRequestDTO;
 import com.example.Bar.dto.event.EventDTO;
@@ -18,15 +19,15 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final EventConverter eventConverter;
 
     public List<EventDTO> getEvents(){
-        return eventRepository.findAllByTimeAfterOrderByIdAsc(LocalDateTime.now()).stream().map(
-                event -> new EventDTO(event.getId(), event.getName(), event.getDescription(), event.getTime()))
-                .collect(Collectors.toList());
+        return eventRepository.findAllByTimeAfterOrderByIdAsc(LocalDateTime.now()).stream()
+                .map(eventConverter::convertToDTO).collect(Collectors.toList());
     }
 
-    public TextResponse addEvent(final AddNewEventRequestDTO addNewEventRequestDTO){
-        eventRepository.save(convertDtoToEntity(addNewEventRequestDTO));
+    public TextResponse addEvent(final AddNewEventRequestDTO eventDTO){
+        eventRepository.save(eventConverter.convertToEntity(eventDTO));
 
         return new TextResponse("Мероприятие добавлено");
     }
@@ -38,15 +39,6 @@ public class EventService {
         eventRepository.delete(eventEntity);
 
         return new TextResponse("Мероприятие удалено");
-    }
-
-    private EventEntity convertDtoToEntity(final AddNewEventRequestDTO addNewEventRequestDTO){
-        final EventEntity eventEntity = new EventEntity();
-        eventEntity.setName(addNewEventRequestDTO.getEventName());
-        eventEntity.setDescription(addNewEventRequestDTO.getDescription());
-        eventEntity.setTime(addNewEventRequestDTO.getDate());
-
-        return eventEntity;
     }
 
 }

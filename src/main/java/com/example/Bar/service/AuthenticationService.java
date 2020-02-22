@@ -23,37 +23,36 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthenticationService {
 
-//    private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
 
-    public SignInResponse signUp(final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
+    public SignInResponse signUp(final SignUpRequestDTO signUpRequestDTO)
+            throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
         if (userRepository.findByEmail(signUpRequestDTO.getEmail()).isPresent()){
             throw new SuchUserAlreadyExistException("User already exist");
         }
 
-        final UserDiscountCardEntity discountCard = createUserDiscountCard(signUpRequestDTO);
-        final UserEntity user = createUser(signUpRequestDTO, discountCard);
+        final UserDiscountCardEntity discountCard = getUserDiscountCard(signUpRequestDTO);
+        final UserEntity user = getUserEntity(signUpRequestDTO, discountCard);
         userRepository.save(user);
 
         return signIn(new SignInRequestDTO(signUpRequestDTO.getEmail(), signUpRequestDTO.getPassword()));
     }
 
-    public SignInResponse signIn(final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, WrongPasswordException {
+    public SignInResponse signIn(final SignInRequestDTO signInRequestDTO)
+            throws UsernameNotFoundException, WrongPasswordException {
         final UserEntity user = userRepository.findByEmail(signInRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
         if (!passwordEncoder.matches(signInRequestDTO.getPassword(), (user.getPassword())))
             throw new WrongPasswordException("Wrong password");
 
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequestDTO.getEmail(), signInRequestDTO.getPassword()));
-
-        return new SignInResponse(jwtUtil.generateToken(new User(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))));
+        return new SignInResponse(jwtUtil.generateToken(getUserDetails(user)));
     }
 
-    private UserDiscountCardEntity createUserDiscountCard(final SignUpRequestDTO signUpRequestDTO){
+    private UserDiscountCardEntity getUserDiscountCard(final SignUpRequestDTO signUpRequestDTO){
         final UserDiscountCardEntity userDiscountCardEntity = new UserDiscountCardEntity();
         userDiscountCardEntity.setName(signUpRequestDTO.getName());
         userDiscountCardEntity.setClientDiscount(0d);
@@ -62,7 +61,8 @@ public class AuthenticationService {
         return userDiscountCardEntity;
     }
 
-    private UserEntity createUser(final SignUpRequestDTO signUpRequestDTO, final UserDiscountCardEntity userDiscountCardEntity){
+    private UserEntity getUserEntity(final SignUpRequestDTO signUpRequestDTO,
+                                     final UserDiscountCardEntity userDiscountCardEntity){
         final UserEntity userEntity = new UserEntity();
         userEntity.setEmail(signUpRequestDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
@@ -71,6 +71,13 @@ public class AuthenticationService {
         userDiscountCardEntity.setUserEntity(userEntity);
 
         return userEntity;
+    }
+
+    private User getUserDetails(UserEntity userEntity) {
+        String email = userEntity.getEmail();
+        String password = userEntity.getPassword();
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().name()));
+        return new User(email, password, authorities);
     }
 
 }

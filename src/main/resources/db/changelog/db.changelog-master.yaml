@@ -214,7 +214,7 @@ databaseChangeLog:
               constraints:
                 nullable: false
           - column:
-              name: count
+              name: amount
               type: INT
               constraints:
                 nullable: false
@@ -236,7 +236,7 @@ databaseChangeLog:
               name: category
               value: "glass"
           - column:
-              name: count
+              name: amount
               value: 23
       - insert:
           tableName: inventories
@@ -251,7 +251,7 @@ databaseChangeLog:
               name: category
               value: "table"
           - column:
-              name: count
+              name: amount
               value: 3
 
   - changeSet:
@@ -420,7 +420,7 @@ databaseChangeLog:
               constraints:
                 nullable: false
           - column:
-              name: count
+              name: amount
               type: INT
               constraints:
                 nullable: false
@@ -442,7 +442,7 @@ databaseChangeLog:
               name: menu_item_id
               value: 1
           - column:
-              name: count
+              name: amount
               value: 5
       - insert:
           tableName: order_choice
@@ -457,7 +457,7 @@ databaseChangeLog:
               name: menu_item_id
               value: 1
           - column:
-              name: count
+              name: amount
               value: 5
 
   - changeSet:
