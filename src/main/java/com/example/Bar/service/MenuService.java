@@ -8,6 +8,8 @@ import com.example.Bar.entity.MenuItemEntity;
 import com.example.Bar.exception.NoSuchElementException;
 import com.example.Bar.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class MenuService {
     private final MenuItemRepository menuItemRepository;
     private final MenuItemConverter menuItemConverter;
 
+    @Cacheable("menu")
     public List<MenuItemDTO> getMenu() {
         return menuItemRepository.findAll().stream().map(menuItemConverter::convertToDTO)
                 .collect(Collectors.toList());
@@ -30,12 +33,14 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     public TextResponse addMenuItem(final AddNewMenuItemRequestDTO menuItemDTO) {
         menuItemRepository.save(menuItemConverter.convertToEntity(menuItemDTO));
 
         return new TextResponse("Позиция добавлена");
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     public TextResponse deleteMenuItem(final Integer productId) throws NoSuchElementException {
         final MenuItemEntity menuItemEntity = menuItemRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Such menuItem doesn't exist"));
