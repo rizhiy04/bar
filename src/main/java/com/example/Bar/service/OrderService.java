@@ -1,19 +1,16 @@
 package com.example.Bar.service;
 
-import com.example.Bar.converter.MenuItemConverter;
 import com.example.Bar.converter.OrderConverter;
 import com.example.Bar.dto.TextResponse;
-import com.example.Bar.dto.menuItem.MenuItemDTO;
 import com.example.Bar.dto.order.*;
-import com.example.Bar.entity.MenuItemEntity;
 import com.example.Bar.entity.OrderChoiceEntity;
 import com.example.Bar.entity.OrderEntity;
 import com.example.Bar.entity.UserDiscountCardEntity;
 import com.example.Bar.exception.NoSuchElementException;
-import com.example.Bar.repository.MenuItemRepository;
 import com.example.Bar.repository.OrderRepository;
 import com.example.Bar.repository.UserDiscountCardRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -81,7 +78,7 @@ public class OrderService {
         final UserDiscountCardEntity userDiscountCardEntity = userDiscountCardRepository.findById(clientId)
                 .orElseThrow(() -> new NoSuchElementException("Such discountCard doesn't exist"));
 
-        price -= price * userDiscountCardEntity.getClientDiscount();
+        price -= Precision.round(price * userDiscountCardEntity.getClientDiscount(), 2);
 
         userDiscountCardEntity.setAllSpentMoney(userDiscountCardEntity.getAllSpentMoney() + price);
         calculateDiscount(userDiscountCardEntity);
@@ -90,8 +87,13 @@ public class OrderService {
         return price;
     }
 
-    //TODO discount system
     private void calculateDiscount(final UserDiscountCardEntity userDiscountCardEntity){
+        final double money = userDiscountCardEntity.getAllSpentMoney();
+
+        if (money > 2000)
+            userDiscountCardEntity.setClientDiscount(0.20D);
+        else
+            userDiscountCardEntity.setClientDiscount(500D % money * 0.05D);
     }
 
 }

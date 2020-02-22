@@ -1,15 +1,11 @@
 package com.example.Bar.dto.menuItem;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AddNewMenuItemRequestDTO {
 
     @NotBlank(message = "name is blank")
