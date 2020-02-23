@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +34,8 @@ public class AbstractControllerTest {
     private UserRepository userRepository;
 
     protected String signIn(final Roles role) throws Exception{
-        final UserEntity userEntity = userRepository.findAllByRole(role).stream().findAny()
+        List<UserEntity> te = userRepository.findAll();
+        final UserEntity userEntity = userRepository.findAllByRole(role).stream().findFirst()
                 .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
         final String response = mockMvc.perform(post("/sign-in")

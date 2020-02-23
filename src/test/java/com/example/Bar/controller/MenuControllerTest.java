@@ -1,10 +1,14 @@
 package com.example.Bar.controller;
 
+import com.example.Bar.entity.MenuItemEntity;
 import com.example.Bar.repository.MenuItemRepository;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,19 +23,22 @@ class MenuControllerTest extends AbstractControllerTest{
 
     @Test
     public void testGetMenuIsOk() throws Exception{
+        menuItemRepository.deleteAll();
+        final List<MenuItemEntity> testMenuItemEntities = getMenuItems();
+        menuItemRepository.saveAll(testMenuItemEntities);
 
         mockMvc.perform(get("/menu"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
-                        "  \"id\" : 1,\n" +
+                        "  \"id\" : "+ testMenuItemEntities.get(0).getId() +",\n" +
                         "  \"name\" : \"Zatecky Gus\",\n" +
                         "  \"category\" : \"beer\",\n" +
                         "  \"description\" : \"Светлый лагер с легким традиционным вкусом\",\n" +
                         "  \"price\" : 5\n" +
                         "},\n" +
                         "{\n" +
-                        "  \"id\" : 12,\n" +
+                        "  \"id\" : "+ testMenuItemEntities.get(1).getId() +",\n" +
                         "  \"name\" : \"Пепперони\",\n" +
                         "  \"category\" : \"pizza\",\n" +
                         "  \"description\" : \"Колбаска пепперони, сыр. Пицца 30см\",\n" +
@@ -42,12 +49,15 @@ class MenuControllerTest extends AbstractControllerTest{
 
     @Test
     public void testGetMenuByCategoryIsOk() throws Exception{
+        menuItemRepository.deleteAll();
+        final List<MenuItemEntity> testMenuItemEntities = getMenuItems();
+        menuItemRepository.saveAll(testMenuItemEntities);
 
         mockMvc.perform(get("/menu/pizza"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
-                        "  \"id\" : 12,\n" +
+                        "  \"id\" : "+ testMenuItemEntities.get(1).getId() +",\n" +
                         "  \"name\" : \"Пепперони\",\n" +
                         "  \"category\" : \"pizza\",\n" +
                         "  \"description\" : \"Колбаска пепперони, сыр. Пицца 30см\",\n" +
@@ -73,7 +83,8 @@ class MenuControllerTest extends AbstractControllerTest{
                         "  \"response\" : \"Позиция добавлена\"\n" +
                         "}"));
 
-        menuItemRepository.findAllByCategory("burger").forEach(burger -> menuItemRepository.delete(burger));
+        final List<MenuItemEntity> testMenuItems = menuItemRepository.findAll();
+        menuItemRepository.delete(testMenuItems.get(testMenuItems.size() - 1));
     }
 
     @Test
@@ -111,7 +122,11 @@ class MenuControllerTest extends AbstractControllerTest{
     public void testDeleteMenuItemIsOk() throws Exception{
         final String token = signIn(Roles.ADMIN);
 
-        mockMvc.perform(delete("/menu/1").header("Authorization", token))
+        menuItemRepository.deleteAll();
+        final List<MenuItemEntity> testMenuItemEntities = getMenuItems();
+        menuItemRepository.saveAll(testMenuItemEntities);
+
+        mockMvc.perform(delete("/menu/" + testMenuItemEntities.get(0).getId()).header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "  \"response\" : \"Позиция удалена\"\n" +
@@ -132,6 +147,22 @@ class MenuControllerTest extends AbstractControllerTest{
 
         mockMvc.perform(delete("/menu/1").header("Authorization", token))
                 .andExpect(status().isForbidden());
+    }
+
+    private List<MenuItemEntity> getMenuItems(){
+        final MenuItemEntity beer = new MenuItemEntity();
+        beer.setName("Zatecky Gus");
+        beer.setCategory("beer");
+        beer.setDescription("Светлый лагер с легким традиционным вкусом");
+        beer.setPrice(5D);
+
+        final MenuItemEntity pizza = new MenuItemEntity();
+        pizza.setName("Пепперони");
+        pizza.setCategory("pizza");
+        pizza.setDescription("Колбаска пепперони, сыр. Пицца 30см");
+        pizza.setPrice(15D);
+
+        return Arrays.asList(beer, pizza);
     }
 
 }

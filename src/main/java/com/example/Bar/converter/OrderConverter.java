@@ -43,6 +43,7 @@ public class OrderConverter {
             final OrderChoiceEntity orderChoiceEntity = getOrderChoiceEntity(order);
             orderEntity.getOrderChoiceEntities().add(orderChoiceEntity);
         }
+        orderEntity.getOrderChoiceEntities().forEach(orderChoiceEntity -> orderChoiceEntity.setOrderEntity(orderEntity));
 
         return orderEntity;
     }

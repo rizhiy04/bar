@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class OrderChoiceEntity extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderEntity orderEntity;
 
     @ManyToOne

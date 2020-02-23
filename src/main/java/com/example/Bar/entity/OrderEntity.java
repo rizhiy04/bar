@@ -21,6 +21,6 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "time_close")
     private LocalDateTime timeClose;
 
-    @OneToMany(mappedBy = "orderEntity")
+    @OneToMany(mappedBy = "orderEntity", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<OrderChoiceEntity> orderChoiceEntities = new ArrayList<>();
 }

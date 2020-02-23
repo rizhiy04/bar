@@ -12,9 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class DiscountCardControllerTest extends AbstractControllerTest{
 
-    @Autowired
-    protected MockMvc mockMvc;
-
     @Test
     public void testGetDiscountCardIsOk() throws Exception{
         final String token = signIn(Roles.CLIENT);
