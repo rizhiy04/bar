@@ -457,3 +457,45 @@ Response: `200 OK`
   "response" : "25.0р."
 }
 ```
+
+### B-22 Как "Официант"  я хочу добавить еще продукты  в заказ
+
+Request: 
+
+`PUT /bar/orders`
+
+```json
+{
+  "tableNumber" : 2,
+  "order" : 
+     [
+      {
+        "id" : 2,
+        "count" : 2
+      }
+    ]
+}
+```
+
+Response: `200 OK`
+
+### B-23 Как "Администратор" я хочу просмотреть весь инвентарь категории "wineglass".
+
+Request:
+
+`GET /bar/inventories/{category}`
+
+Response: `200 OK`
+
+```json
+  [
+     {
+        "name":"Бокал 500 мл",
+        "count":30
+     },
+     {
+        "name":"Бокал 250 мл",
+        "count":13
+     }
+  ]
+```
