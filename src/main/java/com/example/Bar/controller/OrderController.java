@@ -5,7 +5,7 @@ import com.example.Bar.dto.order.CloseOrderRequestDTO;
 import com.example.Bar.dto.order.MakeNewOrderRequestDTO;
 import com.example.Bar.dto.order.OrderDTO;
 import com.example.Bar.dto.order.RevenueRequest;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.service.OrderService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -59,9 +59,9 @@ public class OrderController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse makeOrder(@ApiParam(value = "New order data")
-            @Valid @RequestBody final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
-        return orderService.makeOrder(makeNewOrderRequestDTO);
+    public void makeOrder(@ApiParam(value = "New order data")
+            @Valid @RequestBody final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws BarNoSuchElementException {
+        orderService.makeOrder(makeNewOrderRequestDTO);
     }
 
     @PatchMapping
@@ -74,7 +74,7 @@ public class OrderController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
     public TextResponse closeOrder(@ApiParam(value = "Close order data", required = true)
-            @Valid @RequestBody final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
+            @Valid @RequestBody final CloseOrderRequestDTO closeOrderRequestDTO) throws BarNoSuchElementException {
         return orderService.closeOrder(closeOrderRequestDTO);
     }
 }

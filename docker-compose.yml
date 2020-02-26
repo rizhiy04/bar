@@ -1,9 +1,7 @@
 version: "3"
 services:
   bar:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: bar
     restart: on-failure
     ports:
     - "8080:8080"
@@ -15,6 +13,8 @@ services:
   mysqldb:
     image: mysql:8
     restart: always
+    ports:
+    - "3305:3306"
     networks:
     - barNetwork
     environment:

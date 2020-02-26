@@ -8,14 +8,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,23 +31,42 @@ public class AbstractControllerTest {
     protected PasswordEncoder passwordEncoder;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private UserRepository userRepository;
+
+    @MockBean
+    protected UserRepository userRepository;
+    @MockBean
+    protected EventRepository eventRepository;
+    @MockBean
+    protected InventoryRepository inventoryRepository;
+    @MockBean
+    protected MenuItemRepository menuItemRepository;
+    @MockBean
+    protected OrderRepository orderRepository;
+    @MockBean
+    protected ReservationRepository reservationRepository;
 
     protected String signIn(final Roles role) throws Exception{
-        List<UserEntity> te = userRepository.findAll();
-        final UserEntity userEntity = userRepository.findAllByRole(role).stream().findFirst()
-                .orElseThrow(() -> new UsernameNotFoundException("No such username"));
+        final UserEntity testUserEntity = getUserEntity(role);
+        given(userRepository.findByEmail("client@gmail.com")).willReturn(Optional.of(testUserEntity));
 
         final String response = mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"email\" : \"" + userEntity.getEmail() + "\",\n" +
+                        "  \"email\" : \"client@gmail.com\",\n" +
                         "  \"password\" : \"qwerty\"\n" +
                         "}"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         return "Bearer " + objectMapper.readValue(response, SignInResponse.class).getToken();
+    }
+
+    private UserEntity getUserEntity(Roles roles){
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("client@gmail.com");
+        userEntity.setPassword("$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu");
+        userEntity.setRole(roles);
+
+        return userEntity;
     }
 }

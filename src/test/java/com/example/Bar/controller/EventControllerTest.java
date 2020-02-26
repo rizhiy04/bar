@@ -1,15 +1,18 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.entity.EventEntity;
-import com.example.Bar.repository.EventRepository;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,31 +21,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class EventControllerTest extends AbstractControllerTest {
 
-    @Autowired
-    private EventRepository eventRepository;
-
     @Test
     public void testGetEventsIsOk() throws Exception{
-        eventRepository.deleteAll();
+        //given
         final EventEntity testEventEntity = getEventEntity();
-        eventRepository.save(testEventEntity);
+        given(eventRepository.findAllByTimeAfterOrderByIdAsc(any(LocalDateTime.class)))
+                .willReturn(Collections.singletonList(testEventEntity));
 
+        //when
         mockMvc.perform(get("/events"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
-                        "  \"id\" : "+ testEventEntity.getId() +",\n" +
+                        "  \"id\" : 1,\n" +
                         "  \"eventName\" : \"StandUp вечер\",\n" +
                         "  \"description\" : \"Много известных комиков\",\n" +
                         "  \"date\" : \"04-03-2020 20:00\"\n" +
                         "}\n" +
                         "]"));
+
+        verify(eventRepository, times(1)).findAllByTimeAfterOrderByIdAsc(any(LocalDateTime.class));
     }
 
     @Test
     public void testAddNewEventIsCreated() throws Exception{
+        //given
         final String token = signIn(Roles.ADMIN);
 
+        //when
         mockMvc.perform(post("/events").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -50,19 +56,17 @@ class EventControllerTest extends AbstractControllerTest {
                         "  \"description\" : \"Много известных комиков\",\n" +
                         "  \"date\" : \"14-03-2020 20:00\"\n" +
                         "}"))
-                .andExpect(status().isCreated())
-                .andExpect(content().json("{\n" +
-                        "  \"response\" : \"Мероприятие добавлено\"\n" +
-                        "}"));
+                .andExpect(status().isCreated());
 
-        final List<EventEntity> testEvents = eventRepository.findAll();
-        eventRepository.delete(testEvents.get(testEvents.size()-1));
+        verify(eventRepository,times(1)).save(any(EventEntity.class));
     }
 
     @Test
     public void testAddNewEventAccessDeniedForWaiter() throws Exception{
+        //given
         final String token = signIn(Roles.WAITER);
 
+        //when
         mockMvc.perform(post("/events").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -75,8 +79,10 @@ class EventControllerTest extends AbstractControllerTest {
 
     @Test
     public void testAddNewEventAccessDeniedForClient() throws Exception{
+        //given
         final String token = signIn(Roles.CLIENT);
 
+        //when
         mockMvc.perform(post("/events").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -90,36 +96,56 @@ class EventControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDeleteEventIsOk() throws Exception{
+        //given
         final String token = signIn(Roles.ADMIN);
-
         final EventEntity testEventEntity = getEventEntity();
-        eventRepository.save(testEventEntity);
+        given(eventRepository.findById(1)).willReturn(Optional.of(testEventEntity));
 
-        mockMvc.perform(delete("/events/" + testEventEntity.getId()).header("Authorization", token))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\n" +
-                        "  \"response\" : \"Мероприятие удалено\"\n" +
-                        "}"));
+        //when
+        mockMvc.perform(delete("/events/1").header("Authorization", token))
+                .andExpect(status().isOk());
+
+        verify(eventRepository, times(1)).findById(1);
+        verify(eventRepository, times(1)).delete(any(EventEntity.class));
     }
 
     @Test
     public void testDeleteEventAccessDeniedForWaiter() throws Exception{
+        //given
         final String token = signIn(Roles.WAITER);
 
+        //when
         mockMvc.perform(delete("/events/1").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void testDeleteEventAccessDeniedForClient() throws Exception {
+        //given
         final String token = signIn(Roles.CLIENT);
 
+        //when
         mockMvc.perform(delete("/events/1").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    public void testDeleteEventThrowsBarNoSuchElementException() throws Exception{
+        //given
+        final String token = signIn(Roles.ADMIN);
+        given(eventRepository.findById(1)).willReturn(Optional.empty());
+
+        //when
+        mockMvc.perform(delete("/events/1").header("Authorization", token))
+                .andExpect(status().isBadRequest());
+
+        verify(eventRepository, times(1)).findById(1);
+        verify(eventRepository, times(0)).delete(any(EventEntity.class));
+    }
+
     private EventEntity getEventEntity(){
         final EventEntity eventEntity = new EventEntity();
+        eventEntity.setId(1);
         eventEntity.setName("StandUp вечер");
         eventEntity.setDescription("Много известных комиков");
         eventEntity.setTime(LocalDateTime.of(2020,3,4, 20,0));

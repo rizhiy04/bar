@@ -4,7 +4,7 @@ import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.inventory.AddNewInventoryRequestDTO;
 import com.example.Bar.dto.inventory.ChangeInventoryCountRequestDTO;
 import com.example.Bar.dto.inventory.InventoryDTO;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.service.InventoryService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -44,9 +44,9 @@ public class InventoryController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse changeInventoryCount(@ApiParam(value = "Change inventory count data", required = true)
-            @Valid @RequestBody final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws NoSuchElementException {
-        return inventoryService.changeInventoryCount(changeInventoryCountRequestDTO);
+    public void changeInventoryCount(@ApiParam(value = "Change inventory count data", required = true)
+            @Valid @RequestBody final ChangeInventoryCountRequestDTO changeInventoryCountRequestDTO) throws BarNoSuchElementException {
+        inventoryService.changeInventoryCount(changeInventoryCountRequestDTO);
     }
 
     @PostMapping
@@ -58,9 +58,9 @@ public class InventoryController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse addInventory(@ApiParam(value = "Add new inventory data", required = true)
+    public void addInventory(@ApiParam(value = "Add new inventory data", required = true)
             @Valid @RequestBody final AddNewInventoryRequestDTO addNewInventoryRequestDTO){
-        return inventoryService.addInventory(addNewInventoryRequestDTO);
+        inventoryService.addInventory(addNewInventoryRequestDTO);
     }
 
     @DeleteMapping("/{inventoryId}")
@@ -72,8 +72,8 @@ public class InventoryController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse deleteInventory(@ApiParam(value = "Inventory id", required = true)
-            @PathVariable("inventoryId") final Integer inventoryId) throws NoSuchElementException{
-        return inventoryService.deleteInventory(inventoryId);
+    public void deleteInventory(@ApiParam(value = "Inventory id", required = true)
+            @PathVariable("inventoryId") final Integer inventoryId) throws BarNoSuchElementException {
+        inventoryService.deleteInventory(inventoryId);
     }
 }

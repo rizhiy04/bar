@@ -4,7 +4,7 @@ import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.reservation.FreeTablesDTO;
 import com.example.Bar.dto.reservation.ReservationDTO;
 import com.example.Bar.dto.reservation.ReservationRequestDTO;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.service.ReservationService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -44,7 +44,7 @@ public class ReservationController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public FreeTablesDTO getFreeTables(@PathVariable("hours") final Integer hours) throws NoSuchElementException {
+    public FreeTablesDTO getFreeTables(@PathVariable("hours") final Integer hours) throws BarNoSuchElementException {
         return reservationService.getFreeTables(hours);
     }
 
@@ -56,7 +56,7 @@ public class ReservationController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
     public TextResponse reserveTable(@ApiParam(value = "Reservation data")
-            @Valid @RequestBody final ReservationRequestDTO reserve) throws NoSuchElementException {
+            @Valid @RequestBody final ReservationRequestDTO reserve) throws BarNoSuchElementException {
         return reservationService.reserveTable(reserve);
     }
 

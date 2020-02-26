@@ -5,7 +5,7 @@ import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.menuItem.AddNewMenuItemRequestDTO;
 import com.example.Bar.dto.menuItem.MenuItemDTO;
 import com.example.Bar.entity.MenuItemEntity;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -34,20 +34,16 @@ public class MenuService {
     }
 
     @CacheEvict(value = "menu", allEntries = true)
-    public TextResponse addMenuItem(final AddNewMenuItemRequestDTO menuItemDTO) {
+    public void addMenuItem(final AddNewMenuItemRequestDTO menuItemDTO) {
         menuItemRepository.save(menuItemConverter.convertToEntity(menuItemDTO));
-
-        return new TextResponse("Позиция добавлена");
     }
 
     @CacheEvict(value = "menu", allEntries = true)
-    public TextResponse deleteMenuItem(final Integer productId) throws NoSuchElementException {
+    public void deleteMenuItem(final Integer productId) throws BarNoSuchElementException {
         final MenuItemEntity menuItemEntity = menuItemRepository.findById(productId)
-                .orElseThrow(() -> new NoSuchElementException("Such menuItem doesn't exist"));
+                .orElseThrow(() -> new BarNoSuchElementException("Such menuItem doesn't exist"));
 
         menuItemRepository.delete(menuItemEntity);
-
-        return new TextResponse("Позиция удалена");
     }
 
 }

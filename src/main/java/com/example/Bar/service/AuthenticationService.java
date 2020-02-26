@@ -5,8 +5,8 @@ import com.example.Bar.dto.authentication.SignInResponse;
 import com.example.Bar.dto.authentication.SignUpRequestDTO;
 import com.example.Bar.entity.UserDiscountCardEntity;
 import com.example.Bar.entity.UserEntity;
-import com.example.Bar.exception.SuchUserAlreadyExistException;
-import com.example.Bar.exception.WrongPasswordException;
+import com.example.Bar.exception.BarSuchUserAlreadyExistException;
+import com.example.Bar.exception.BarWrongPasswordException;
 import com.example.Bar.repository.UserRepository;
 import com.example.Bar.security.JwtUtil;
 import com.example.Bar.security.Roles;
@@ -29,9 +29,9 @@ public class AuthenticationService {
     private final UserRepository userRepository;
 
     public SignInResponse signUp(final SignUpRequestDTO signUpRequestDTO)
-            throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException{
+            throws BarSuchUserAlreadyExistException, UsernameNotFoundException, BarWrongPasswordException {
         if (userRepository.findByEmail(signUpRequestDTO.getEmail()).isPresent()){
-            throw new SuchUserAlreadyExistException("User already exist");
+            throw new BarSuchUserAlreadyExistException("User already exist");
         }
 
         final UserDiscountCardEntity discountCard = getUserDiscountCard(signUpRequestDTO);
@@ -42,12 +42,12 @@ public class AuthenticationService {
     }
 
     public SignInResponse signIn(final SignInRequestDTO signInRequestDTO)
-            throws UsernameNotFoundException, WrongPasswordException {
+            throws UsernameNotFoundException, BarWrongPasswordException {
         final UserEntity user = userRepository.findByEmail(signInRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("No such username"));
 
         if (!passwordEncoder.matches(signInRequestDTO.getPassword(), (user.getPassword())))
-            throw new WrongPasswordException("Wrong password");
+            throw new BarWrongPasswordException("Wrong password");
 
         return new SignInResponse(jwtUtil.generateToken(getUserDetails(user)));
     }

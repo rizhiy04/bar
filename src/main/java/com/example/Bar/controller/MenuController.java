@@ -3,7 +3,7 @@ package com.example.Bar.controller;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.menuItem.AddNewMenuItemRequestDTO;
 import com.example.Bar.dto.menuItem.MenuItemDTO;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.service.MenuService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -53,9 +53,9 @@ public class MenuController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse addNewMenuItem(@ApiParam(value = "Add menu item data", required = true)
+    public void addNewMenuItem(@ApiParam(value = "Add menu item data", required = true)
             @Valid @RequestBody final AddNewMenuItemRequestDTO addNewMenuItemRequestDTO){
-        return menuService.addMenuItem(addNewMenuItemRequestDTO);
+        menuService.addMenuItem(addNewMenuItemRequestDTO);
     }
 
     @DeleteMapping("/{productId}")
@@ -67,8 +67,8 @@ public class MenuController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse deleteMenuItem(@ApiParam(value = "Menu item id", required = true)
-            @PathVariable("productId") final Integer productId) throws NoSuchElementException {
-        return menuService.deleteMenuItem(productId);
+    public void deleteMenuItem(@ApiParam(value = "Menu item id", required = true)
+            @PathVariable("productId") final Integer productId) throws BarNoSuchElementException {
+        menuService.deleteMenuItem(productId);
     }
 }

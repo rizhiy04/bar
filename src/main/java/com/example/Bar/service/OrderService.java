@@ -6,7 +6,7 @@ import com.example.Bar.dto.order.*;
 import com.example.Bar.entity.OrderChoiceEntity;
 import com.example.Bar.entity.OrderEntity;
 import com.example.Bar.entity.UserDiscountCardEntity;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.OrderRepository;
 import com.example.Bar.repository.UserDiscountCardRepository;
 import lombok.AllArgsConstructor;
@@ -29,10 +29,8 @@ public class OrderService {
         return orderRepository.findAll().stream().map(orderConverter::convertToDTO).collect(Collectors.toList());
     }
 
-    public TextResponse makeOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws NoSuchElementException {
+    public void makeOrder(final MakeNewOrderRequestDTO makeNewOrderRequestDTO) throws BarNoSuchElementException {
         orderRepository.save(orderConverter.convertToEntity(makeNewOrderRequestDTO));
-
-        return new TextResponse("Заказ оформлен");
     }
 
     public TextResponse getRevenueByTime(final RevenueRequest revenueRequest){
@@ -40,10 +38,10 @@ public class OrderService {
                 .map(orderEntity -> calculateRevenue(orderEntity.getOrderChoiceEntities()))
                 .reduce(0D, Double::sum);
 
-        return new TextResponse("Выручка: " + price + "р.");
+        return new TextResponse(price + "р.");
     }
 
-    public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
+    public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws BarNoSuchElementException {
         final OrderEntity orderEntity = findOrderToClose(closeOrderRequestDTO);
         double orderPrice = calculatePrice(orderEntity);
 
@@ -54,7 +52,7 @@ public class OrderService {
         orderEntity.setTimeClose(LocalDateTime.now());
         orderRepository.save(orderEntity);
 
-        return new TextResponse("Заказ закрыт, к оплате " + orderPrice + "р");
+        return new TextResponse(orderPrice + "р");
     }
 
     private double calculateRevenue(final List<OrderChoiceEntity> orderChoiceEntities){
@@ -63,9 +61,9 @@ public class OrderService {
                 .reduce(0D, Double::sum);
     }
 
-    private OrderEntity findOrderToClose(final CloseOrderRequestDTO closeOrderRequestDTO) throws NoSuchElementException{
+    private OrderEntity findOrderToClose(final CloseOrderRequestDTO closeOrderRequestDTO) throws BarNoSuchElementException {
         return orderRepository.findByTableNumberAndTimeCloseIsNull(closeOrderRequestDTO.getTableNumber())
-                .orElseThrow(() -> new NoSuchElementException("Such orderEntity doesn't exist"));
+                .orElseThrow(() -> new BarNoSuchElementException("Such orderEntity doesn't exist"));
     }
 
     private double calculatePrice(final OrderEntity orderEntity){
@@ -74,9 +72,9 @@ public class OrderService {
                 .reduce(0D, Double::sum);
     }
 
-    private double applyUserDiscountCard(final Integer clientId, double price) throws NoSuchElementException{
+    private double applyUserDiscountCard(final Integer clientId, double price) throws BarNoSuchElementException {
         final UserDiscountCardEntity userDiscountCardEntity = userDiscountCardRepository.findById(clientId)
-                .orElseThrow(() -> new NoSuchElementException("Such discountCard doesn't exist"));
+                .orElseThrow(() -> new BarNoSuchElementException("Such discountCard doesn't exist"));
 
         price -= Precision.round(price * userDiscountCardEntity.getClientDiscount(), 2);
 

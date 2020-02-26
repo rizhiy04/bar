@@ -1,15 +1,18 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.entity.InventoryEntity;
-import com.example.Bar.repository.InventoryRepository;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -17,47 +20,50 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class InventoryControllerTest extends AbstractControllerTest{
 
-    @Autowired
-    private InventoryRepository inventoryRepository;
-
     @Test
     public void testGetInventoryIsOk() throws Exception{
+        //given
         final String token = signIn(Roles.ADMIN);
-
-        inventoryRepository.deleteAll();
         final List<InventoryEntity> testInventoryEntities = getInventoryEntities();
-        inventoryRepository.saveAll(testInventoryEntities);
+        given(inventoryRepository.findAll()).willReturn(testInventoryEntities);
 
+        //when
         mockMvc.perform(get("/inventories").header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n" +
                         "{\n" +
-                        "  \"id\" : "+ testInventoryEntities.get(0).getId() +",\n" +
+                        "  \"id\" : 1,\n" +
                         "  \"name\" : \"Рюмка 50 мл\",\n" +
                         "  \"category\" : \"glass\",\n" +
                         "  \"count\" : 23\n" +
                         "},\n" +
                         "{\n" +
-                        "  \"id\" : "+ testInventoryEntities.get(1).getId() +",\n" +
+                        "  \"id\" : 2,\n" +
                         "  \"name\" : \"Стол\",\n" +
                         "  \"category\" : \"table\",\n" +
                         "  \"count\" : 3\n" +
                         "}\n" +
                         "]"));
+
+        verify(inventoryRepository, times(1)).findAll();
     }
 
     @Test
     public void testGetInventoryAccessDeniedForWaiter() throws Exception{
+        //given
         final String token = signIn(Roles.WAITER);
 
+        //when
         mockMvc.perform(get("/inventories").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void testGetInventoryAccessDeniedForClient() throws Exception{
+        //given
         final String token = signIn(Roles.CLIENT);
 
+        //when
         mockMvc.perform(get("/inventories").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
@@ -65,28 +71,30 @@ class InventoryControllerTest extends AbstractControllerTest{
 
     @Test
     public void testChangeInventoryCountIsOk() throws Exception{
+        //given
         final String token = signIn(Roles.ADMIN);
-
-        inventoryRepository.deleteAll();
         final List<InventoryEntity> testInventoryEntities = getInventoryEntities();
-        inventoryRepository.saveAll(testInventoryEntities);
+        given(inventoryRepository.findById(1)).willReturn(Optional.of(testInventoryEntities.get(0)));
 
+        //when
         mockMvc.perform(patch("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"id\" : "+ testInventoryEntities.get(0).getId() +",\n" +
+                        "  \"id\" : 1,\n" +
                         "  \"count\" : 5\n" +
                         "}"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\n" +
-                        "  \"response\" : \"Сохранено\"\n" +
-                        "}"));
+                .andExpect(status().isOk());
+
+        verify(inventoryRepository, times(1)).findById(1);
+        verify(inventoryRepository, times(1)).save(any(InventoryEntity.class));
     }
 
     @Test
     public void testChangeInventoryAccessDeniedForWaiter() throws Exception{
+        //given
         final String token = signIn(Roles.WAITER);
 
+        //when
         mockMvc.perform(patch("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -98,8 +106,10 @@ class InventoryControllerTest extends AbstractControllerTest{
 
     @Test
     public void testChangeInventoryAccessDeniedForClient() throws Exception{
+        //given
         final String token = signIn(Roles.CLIENT);
 
+        //when
         mockMvc.perform(patch("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -109,11 +119,32 @@ class InventoryControllerTest extends AbstractControllerTest{
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    public void testChangeInventoryThrowsBarNoSuchElementException() throws Exception{
+        //given
+        final String token = signIn(Roles.ADMIN);
+        given(inventoryRepository.findById(1)).willReturn(Optional.empty());
+
+        //when
+        mockMvc.perform(patch("/inventories").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"id\" : 1,\n" +
+                        "  \"count\" : 5\n" +
+                        "}"))
+                .andExpect(status().isBadRequest());
+
+        verify(inventoryRepository, times(1)).findById(1);
+        verify(inventoryRepository, times(0)).save(any(InventoryEntity.class));
+    }
+
 
     @Test
     public void testAddNewInventoryIsCreated() throws Exception{
+        //given
         final String token = signIn(Roles.ADMIN);
 
+        //when
         mockMvc.perform(post("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -121,19 +152,17 @@ class InventoryControllerTest extends AbstractControllerTest{
                         "  \"category\" : \"wineglass\",\n" +
                         "  \"count\" : 30\n" +
                         "}"))
-                .andExpect(status().isCreated())
-                .andExpect(content().json("{\n" +
-                        "  \"response\" : \"Инвентарь добавлен\"\n" +
-                        "}"));
+                .andExpect(status().isCreated());
 
-        final List<InventoryEntity> testInventoryEntities = inventoryRepository.findAll();
-        inventoryRepository.delete(testInventoryEntities.get(testInventoryEntities.size() - 1));
+        verify(inventoryRepository, times(1)).save(any(InventoryEntity.class));
     }
 
     @Test
     public void testAddNewInventoryAccessDeniedForWaiter() throws Exception {
+        //given
         final String token = signIn(Roles.WAITER);
 
+        //when
         mockMvc.perform(post("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -146,8 +175,10 @@ class InventoryControllerTest extends AbstractControllerTest{
 
     @Test
     public void testAddNewInventoryAccessDeniedForClient() throws Exception {
+        //given
         final String token = signIn(Roles.CLIENT);
 
+        //when
         mockMvc.perform(post("/inventories").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -161,42 +192,62 @@ class InventoryControllerTest extends AbstractControllerTest{
 
     @Test
     public void testDeleteInventoryIsOk() throws Exception{
+        //given
         final String token = signIn(Roles.ADMIN);
-
-        inventoryRepository.deleteAll();
         final List<InventoryEntity> testInventoryEntities = getInventoryEntities();
-        inventoryRepository.saveAll(testInventoryEntities);
+        given(inventoryRepository.findById(1)).willReturn(Optional.of(testInventoryEntities.get(0)));
 
-        mockMvc.perform(delete("/inventories/" + testInventoryEntities.get(0).getId()).header("Authorization", token))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\n" +
-                        "  \"response\" : \"Инвентарь удален\"\n" +
-                        "}"));
+        //when
+        mockMvc.perform(delete("/inventories/1").header("Authorization", token))
+                .andExpect(status().isOk());
+
+        verify(inventoryRepository, times(1)).findById(1);
+        verify(inventoryRepository, times(1)).delete(any(InventoryEntity.class));
     }
 
     @Test
     public void testDeleteInventoryAccessDeniedForWaiter() throws Exception{
+        //given
         final String token = signIn(Roles.WAITER);
 
+        //when
         mockMvc.perform(delete("/inventories/1").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void testDeleteInventoryAccessDeniedForClient() throws Exception{
+        //given
         final String token = signIn(Roles.CLIENT);
 
+        //when
         mockMvc.perform(delete("/inventories/1").header("Authorization", token))
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    public void testDeleteInventoryThrowsBarNoSuchElementException() throws Exception{
+        //given
+        final String token = signIn(Roles.ADMIN);
+        given(inventoryRepository.findById(1)).willReturn(Optional.empty());
+
+        //when
+        mockMvc.perform(delete("/inventories/1").header("Authorization", token))
+                .andExpect(status().isBadRequest());
+
+        verify(inventoryRepository, times(1)).findById(1);
+        verify(inventoryRepository, times(0)).delete(any(InventoryEntity.class));
+    }
+
     private List<InventoryEntity> getInventoryEntities(){
         final InventoryEntity glass = new InventoryEntity();
+        glass.setId(1);
         glass.setName("Рюмка 50 мл");
         glass.setCategory("glass");
         glass.setAmount(23);
 
         final InventoryEntity table = new InventoryEntity();
+        table.setId(2);
         table.setName("Стол");
         table.setCategory("table");
         table.setAmount(3);

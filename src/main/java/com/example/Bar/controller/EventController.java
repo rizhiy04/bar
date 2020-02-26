@@ -3,7 +3,7 @@ package com.example.Bar.controller;
 import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.event.AddNewEventRequestDTO;
 import com.example.Bar.dto.event.EventDTO;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.service.EventService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -41,9 +41,9 @@ public class EventController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse addEvent(@ApiParam(value = "New event data", required = true)
+    public void addEvent(@ApiParam(value = "New event data", required = true)
             @Valid @RequestBody final AddNewEventRequestDTO addNewEventRequestDTO){
-        return eventService.addEvent(addNewEventRequestDTO);
+        eventService.addEvent(addNewEventRequestDTO);
     }
 
     @DeleteMapping("/{eventId}")
@@ -55,7 +55,7 @@ public class EventController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse deleteEvent(@PathVariable("eventId") final Integer eventId) throws NoSuchElementException {
-        return eventService.deleteEvent(eventId);
+    public void deleteEvent(@PathVariable("eventId") final Integer eventId) throws BarNoSuchElementException {
+        eventService.deleteEvent(eventId);
     }
 }

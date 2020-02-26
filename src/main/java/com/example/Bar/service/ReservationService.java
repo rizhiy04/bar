@@ -7,7 +7,7 @@ import com.example.Bar.dto.reservation.ReservationDTO;
 import com.example.Bar.dto.reservation.ReservationRequestDTO;
 import com.example.Bar.entity.OrderEntity;
 import com.example.Bar.entity.ReservationEntity;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.InventoryRepository;
 import com.example.Bar.repository.OrderRepository;
 import com.example.Bar.repository.ReservationRepository;
@@ -36,7 +36,7 @@ public class ReservationService {
                 .map(reservationConverter::convertToDTO).collect(Collectors.toList());
     }
 
-    public FreeTablesDTO getFreeTables(final Integer hours) throws NoSuchElementException{
+    public FreeTablesDTO getFreeTables(final Integer hours) throws BarNoSuchElementException {
         final List<OrderEntity> unclosedOrders = orderRepository.findAllByTimeCloseIsNull();
         final List<ReservationEntity> nearestReservation = getNearestReservation(hours);
         final Set<Integer> unfreeTables = getUnfreeTables(unclosedOrders, nearestReservation);
@@ -44,7 +44,7 @@ public class ReservationService {
         return getFreeTables(unfreeTables, getTablesCount());
     }
 
-    public TextResponse reserveTable(final ReservationRequestDTO reserve) throws NoSuchElementException {
+    public TextResponse reserveTable(final ReservationRequestDTO reserve) throws BarNoSuchElementException {
         final Integer tablesCount = getTablesCount();
         final List<ReservationEntity> reservedTables = getReservationsByTime(reserve.getTime());
 
@@ -54,12 +54,12 @@ public class ReservationService {
         final ReservationEntity reservation = getReservation(reservedTables, tablesCount, reserve);
         reservationRepository.save(reservation);
 
-        return new TextResponse("Ваш столик №" + reservation.getTableNumber());
+        return new TextResponse("№" + reservation.getTableNumber());
     }
 
-    private Integer getTablesCount() throws NoSuchElementException{
+    private Integer getTablesCount() throws BarNoSuchElementException {
         return inventoryRepository.findByCategory("table")
-                .orElseThrow(() -> new NoSuchElementException("Tables don't exist")).getAmount();
+                .orElseThrow(() -> new BarNoSuchElementException("Tables don't exist")).getAmount();
     }
 
     private List<ReservationEntity> getNearestReservation(final Integer hours){

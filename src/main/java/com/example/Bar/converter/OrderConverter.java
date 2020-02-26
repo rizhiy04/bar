@@ -7,7 +7,7 @@ import com.example.Bar.dto.order.OrderDTO;
 import com.example.Bar.entity.MenuItemEntity;
 import com.example.Bar.entity.OrderChoiceEntity;
 import com.example.Bar.entity.OrderEntity;
-import com.example.Bar.exception.NoSuchElementException;
+import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class OrderConverter {
         return orderDTO;
     }
 
-    public OrderEntity convertToEntity(MakeNewOrderRequestDTO orderDTO) throws NoSuchElementException{
+    public OrderEntity convertToEntity(MakeNewOrderRequestDTO orderDTO) throws BarNoSuchElementException {
         final OrderEntity orderEntity = new OrderEntity();
         orderEntity.setTableNumber(orderDTO.getTableNumber());
         orderEntity.setTimeOpen(LocalDateTime.now());
@@ -62,10 +62,10 @@ public class OrderConverter {
         return orderChoiceDTO;
     }
 
-    private OrderChoiceEntity getOrderChoiceEntity(Order order) throws NoSuchElementException {
+    private OrderChoiceEntity getOrderChoiceEntity(Order order) throws BarNoSuchElementException {
         final OrderChoiceEntity orderChoiceEntity = new OrderChoiceEntity();
         orderChoiceEntity.setMenuItemEntity(menuItemRepository.findById(order.getId())
-                .orElseThrow(() -> new NoSuchElementException("Such menuItem doesn't exist")));
+                .orElseThrow(() -> new BarNoSuchElementException("Such menuItem doesn't exist")));
         orderChoiceEntity.setAmount(order.getCount());
         return orderChoiceEntity;
     }

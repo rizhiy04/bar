@@ -3,8 +3,8 @@ package com.example.Bar.controller;
 import com.example.Bar.dto.authentication.SignInRequestDTO;
 import com.example.Bar.dto.authentication.SignInResponse;
 import com.example.Bar.dto.authentication.SignUpRequestDTO;
-import com.example.Bar.exception.SuchUserAlreadyExistException;
-import com.example.Bar.exception.WrongPasswordException;
+import com.example.Bar.exception.BarSuchUserAlreadyExistException;
+import com.example.Bar.exception.BarWrongPasswordException;
 import com.example.Bar.service.AuthenticationService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class AuthenticationController {
             @ApiResponse(code = 400, message = "User already exist")
     })
     public SignInResponse signUp(@ApiParam(value = "User signUp data", required = true)
-            @Valid @RequestBody final SignUpRequestDTO signUpRequestDTO) throws SuchUserAlreadyExistException, UsernameNotFoundException, WrongPasswordException {
+            @Valid @RequestBody final SignUpRequestDTO signUpRequestDTO) throws BarSuchUserAlreadyExistException, UsernameNotFoundException, BarWrongPasswordException {
         return authenticationService.signUp(signUpRequestDTO);
     }
 
@@ -37,7 +37,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "SignIn", notes = "Use this method to signIn, if user doesn't exist")
     public SignInResponse signIn(@ApiParam(value = "User signIn data", required = true)
-            @Valid @RequestBody final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, WrongPasswordException{
+            @Valid @RequestBody final SignInRequestDTO signInRequestDTO) throws UsernameNotFoundException, BarWrongPasswordException {
         return authenticationService.signIn(signInRequestDTO);
     }
 }
