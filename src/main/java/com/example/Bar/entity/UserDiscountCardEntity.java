@@ -4,6 +4,7 @@ package com.example.Bar.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "discount_card")
@@ -17,7 +18,7 @@ public class UserDiscountCardEntity extends BaseEntity {
     private Double clientDiscount;
 
     @Column(name = "all_spent_money")
-    private Double allSpentMoney;
+    private BigDecimal allSpentMoney;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

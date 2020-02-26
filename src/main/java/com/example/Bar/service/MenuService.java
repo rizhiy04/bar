@@ -1,13 +1,12 @@
 package com.example.Bar.service;
 
 import com.example.Bar.converter.MenuItemConverter;
-import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.menuItem.AddNewMenuItemRequestDTO;
 import com.example.Bar.dto.menuItem.MenuItemDTO;
 import com.example.Bar.entity.MenuItemEntity;
 import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.MenuItemRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class MenuService {
 
     private final MenuItemRepository menuItemRepository;

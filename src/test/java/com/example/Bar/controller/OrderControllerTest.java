@@ -3,12 +3,11 @@ package com.example.Bar.controller;
 import com.example.Bar.entity.MenuItemEntity;
 import com.example.Bar.entity.OrderChoiceEntity;
 import com.example.Bar.entity.OrderEntity;
-import com.example.Bar.entity.UserEntity;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -117,7 +116,7 @@ class OrderControllerTest extends AbstractControllerTest{
                                 "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"25.0р.\"\n" +
+                        "  \"response\" : \"25.00р.\"\n" +
                         "}"));
     }
 
@@ -211,7 +210,7 @@ class OrderControllerTest extends AbstractControllerTest{
                         "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"25.0р\"\n" +
+                        "  \"response\" : \"25.00р\"\n" +
                         "}"));
 
         verify(orderRepository, times(1)).save(any(OrderEntity.class));
@@ -265,7 +264,7 @@ class OrderControllerTest extends AbstractControllerTest{
         beer.setName("Zatecky Gus");
         beer.setCategory("beer");
         beer.setDescription("Светлый лагер с легким традиционным вкусом");
-        beer.setPrice(5D);
+        beer.setPrice(BigDecimal.valueOf(5));
 
         menuItemRepository.save(beer);
 

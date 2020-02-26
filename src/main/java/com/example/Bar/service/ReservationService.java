@@ -11,7 +11,7 @@ import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.InventoryRepository;
 import com.example.Bar.repository.OrderRepository;
 import com.example.Bar.repository.ReservationRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,8 +22,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;

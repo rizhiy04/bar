@@ -11,7 +11,7 @@ public class DiscountCardConverter {
         final DiscountCardDTO discountCardDTO = new DiscountCardDTO();
         discountCardDTO.setName(userDiscountCardEntity.getName());
         discountCardDTO.setEmail(userDiscountCardEntity.getUserEntity().getEmail());
-        discountCardDTO.setAllSpentMoney(userDiscountCardEntity.getAllSpentMoney());
+        discountCardDTO.setAllSpentMoney(userDiscountCardEntity.getAllSpentMoney().doubleValue());
         discountCardDTO.setDiscount(userDiscountCardEntity.getClientDiscount());
 
         return discountCardDTO;

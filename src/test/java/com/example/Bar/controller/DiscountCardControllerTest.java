@@ -5,6 +5,7 @@ import com.example.Bar.entity.UserEntity;
 import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -59,7 +60,7 @@ class DiscountCardControllerTest extends AbstractControllerTest{
     private UserDiscountCardEntity getUserDiscountCardEntity(){
         final UserDiscountCardEntity userDiscountCardEntity = new UserDiscountCardEntity();
         userDiscountCardEntity.setClientDiscount(0.00D);
-        userDiscountCardEntity.setAllSpentMoney(0.00D);
+        userDiscountCardEntity.setAllSpentMoney(BigDecimal.valueOf(0));
         userDiscountCardEntity.setName("Денис");
 
         return userDiscountCardEntity;

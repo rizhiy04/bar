@@ -5,6 +5,7 @@ import com.example.Bar.security.Roles;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -184,14 +185,14 @@ class MenuControllerTest extends AbstractControllerTest{
         beer.setName("Zatecky Gus");
         beer.setCategory("beer");
         beer.setDescription("Светлый лагер с легким традиционным вкусом");
-        beer.setPrice(5D);
+        beer.setPrice(BigDecimal.valueOf(5));
 
         final MenuItemEntity pizza = new MenuItemEntity();
         pizza.setId(12);
         pizza.setName("Пепперони");
         pizza.setCategory("pizza");
         pizza.setDescription("Колбаска пепперони, сыр. Пицца 30см");
-        pizza.setPrice(15D);
+        pizza.setPrice(BigDecimal.valueOf(15));
 
         return Arrays.asList(beer, pizza);
     }

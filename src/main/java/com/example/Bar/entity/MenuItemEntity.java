@@ -4,6 +4,7 @@ package com.example.Bar.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "menu_items")
@@ -20,7 +21,7 @@ public class MenuItemEntity extends BaseEntity{
     private String description;
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
 
 }

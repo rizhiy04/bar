@@ -1,13 +1,12 @@
 package com.example.Bar.service;
 
 import com.example.Bar.converter.EventConverter;
-import com.example.Bar.dto.TextResponse;
 import com.example.Bar.dto.event.AddNewEventRequestDTO;
 import com.example.Bar.dto.event.EventDTO;
 import com.example.Bar.entity.EventEntity;
 import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.EventRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepository;

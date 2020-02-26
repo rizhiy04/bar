@@ -5,8 +5,6 @@ services:
     restart: on-failure
     ports:
     - "8080:8080"
-    networks:
-    - barNetwork
     depends_on:
       - mysqldb
 
@@ -15,13 +13,8 @@ services:
     restart: always
     ports:
     - "3305:3306"
-    networks:
-    - barNetwork
     environment:
     - MYSQL_ROOT_PASSWORD=root
     - MYSQL_DATABASE=bar
     volumes:
     - /opt/mysql/data:/var/lib/mysql
-
-networks:
-  barNetwork:

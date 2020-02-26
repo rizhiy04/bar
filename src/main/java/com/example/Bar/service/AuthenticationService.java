@@ -10,17 +10,18 @@ import com.example.Bar.exception.BarWrongPasswordException;
 import com.example.Bar.repository.UserRepository;
 import com.example.Bar.security.JwtUtil;
 import com.example.Bar.security.Roles;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthenticationService {
 
     private final JwtUtil jwtUtil;
@@ -56,7 +57,7 @@ public class AuthenticationService {
         final UserDiscountCardEntity userDiscountCardEntity = new UserDiscountCardEntity();
         userDiscountCardEntity.setName(signUpRequestDTO.getName());
         userDiscountCardEntity.setClientDiscount(0d);
-        userDiscountCardEntity.setAllSpentMoney(0d);
+        userDiscountCardEntity.setAllSpentMoney(new BigDecimal(0));
 
         return userDiscountCardEntity;
     }

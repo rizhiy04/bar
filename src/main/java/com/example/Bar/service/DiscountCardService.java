@@ -4,13 +4,13 @@ import com.example.Bar.converter.DiscountCardConverter;
 import com.example.Bar.dto.discountCard.DiscountCardDTO;
 import com.example.Bar.entity.UserDiscountCardEntity;
 import com.example.Bar.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class DiscountCardService {
 
     private final UserRepository userRepository;
