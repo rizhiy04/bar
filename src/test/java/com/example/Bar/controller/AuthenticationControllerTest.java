@@ -84,7 +84,7 @@ class AuthenticationControllerTest extends AbstractControllerTest{
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"client@gmail.com\",\n" +
-                        "  \"password\" : \"qwerty12345\"\n" +
+                        "  \"password\" : \"qwerty\"\n" +
                         "}"))
                 .andExpect(status().isBadRequest());
 

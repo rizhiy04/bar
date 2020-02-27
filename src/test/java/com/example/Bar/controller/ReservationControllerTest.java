@@ -58,7 +58,7 @@ class ReservationControllerTest extends AbstractControllerTest{
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
-                        "  \"id\" : "+ testReservationEntity.getId() +",\n" +
+                        "  \"id\" : 1,\n" +
                         "  \"clientName\" : \"Денис\",\n" +
                         "  \"reserveTime\" : \"04-03-2020 19:00\",\n" +
                         "  \"tableNumber\" : 2\n" +

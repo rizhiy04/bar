@@ -123,8 +123,8 @@ Response: `200 OK`
 {
   "name" : "Денис",
   "email" : "client@gmail.com",
-  "discount" : 10,
-  "allSpentMoney" : 1250
+  "discount" : 0.0,
+  "allSpentMoney" : 0.0
 }
 ```
 
@@ -325,7 +325,7 @@ Request:
 
 ```json
 {
-  "id" : 2,
+  "id" : 1,
   "count" : 5
 }
 ```
@@ -422,6 +422,24 @@ Response: `200 OK`
       "tableNumber":2,
       "timeOpen":"14-03-2020 20:00",
       "timeClose": null,
+      "order":[ 
+         { 
+            "menuItem":{ 
+               "id":1,
+               "name":"Zatecky Gus",
+               "category":"beer",
+               "description":"Светлый лагер с легким традиционным вкусом",
+               "price":5.0
+            },
+            "count":5
+         }
+      ]
+   },
+   { 
+      "id":2,
+      "tableNumber":2,
+      "timeOpen":"14-01-2020 20:00",
+      "timeClose": "14-01-2020 22:00",
       "order":[ 
          { 
             "menuItem":{ 
