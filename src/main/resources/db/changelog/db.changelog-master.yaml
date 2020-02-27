@@ -4,508 +4,1204 @@ databaseChangeLog:
       id: add user table
       author: denis
       changes:
-      - createTable:
-          tableName: users
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: email
-              type: varchar(64)
-              constraints:
-                unique: true
-                nullable: false
-          - column:
-              name: password
-              type: varchar(512)
-              constraints:
-                nullable: false
-          - column:
-              name: role
-              type: enum('CLIENT', 'WAITER', 'ADMIN')
-              constraints:
-                nullable: false
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(64)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: enum('CLIENT', 'WAITER', 'ADMIN')
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert into the user table
       author: denis
       changes:
-      - insert:
-          tableName: users
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: email
-              value: "client@gmail.com"
-          - column:
-              name: password
-              value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
-          - column:
-              name: role
-              value: 'CLIENT'
-      - insert:
-          tableName: users
-          columns:
-          - column:
-              name: id
-              value: 2
-          - column:
-              name: email
-              value: "waiter@gmail.com"
-          - column:
-              name: password
-              value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
-          - column:
-              name: role
-              value: 'WAITER'
-      - insert:
-          tableName: users
-          columns:
-          - column:
-              name: id
-              value: 3
-          - column:
-              name: email
-              value: "admin@gmail.com"
-          - column:
-              name: password
-              value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
-          - column:
-              name: role
-              value: 'ADMIN'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: email
+                  value: "client@gmail.com"
+              - column:
+                  name: password
+                  value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
+              - column:
+                  name: role
+                  value: 'CLIENT'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: email
+                  value: "waiter@gmail.com"
+              - column:
+                  name: password
+                  value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
+              - column:
+                  name: role
+                  value: 'WAITER'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: email
+                  value: "admin@gmail.com"
+              - column:
+                  name: password
+                  value: "$2a$10$X3DIONmNXM1Rs/CExdtt3efVJbX5j8jYRDkos2EcY.cqB7zwFvBFu"
+              - column:
+                  name: role
+                  value: 'ADMIN'
 
   - changeSet:
       id: create discount_card table
       author: denis
       changes:
-      - createTable:
-          tableName: discount_card
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: name
-              type: varchar(64)
-              constraints:
-                nullable: false
-          - column:
-              name: client_discount
-              type: DECIMAL(3,2)
-              constraints:
-                nullable: false
-          - column:
-              name: all_spent_money
-              type: DECIMAL(8,2)
-              constraints:
-                nullable: false
-          - column:
-              name: user_id
-              type: INT
-              constraints:
-                nullable: false
+        - createTable:
+            tableName: discount_card
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_discount
+                  type: DECIMAL(3,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: all_spent_money
+                  type: DECIMAL(8,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert into the discount_card table
       author: denis
       changes:
-      - insert:
-          tableName: discount_card
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: name
-              value: "Денис"
-          - column:
-              name: client_discount
-              value: 0.00
-          - column:
-              name: all_spent_money
-              value: 0.00
-          - column:
-              name: user_id
-              value: 1
+        - insert:
+            tableName: discount_card
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Денис"
+              - column:
+                  name: client_discount
+                  value: 0.00
+              - column:
+                  name: all_spent_money
+                  value: 0.00
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: discount_card
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Waiter"
+              - column:
+                  name: client_discount
+                  value: 0.00
+              - column:
+                  name: all_spent_money
+                  value: 0.00
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: discount_card
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Admin"
+              - column:
+                  name: client_discount
+                  value: 0.00
+              - column:
+                  name: all_spent_money
+                  value: 0.00
+              - column:
+                  name: user_id
+                  value: 3
 
   - changeSet:
       id: create event table
       author: denis
       changes:
-      - createTable:
-          tableName: events
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: name
-              type: varchar(32)
-              constraints:
-                nullable: false
-          - column:
-              name: description
-              type: varchar(128)
-              constraints:
-                nullable: false
-          - column:
-              name: time
-              type: TIMESTAMP(2)
-              constraints:
-                nullable: false
+        - createTable:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: TIMESTAMP(2)
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert into events table
       author: denis
       changes:
-      - insert:
-          tableName: events
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: name
-              value: "StandUp вечер"
-          - column:
-              name: description
-              value: "Много известных комиков"
-          - column:
-              name: time
-              value: '2020-03-04 20:00:00'
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "StandUp вечер"
+              - column:
+                  name: description
+                  value: "Много известных комиков"
+              - column:
+                  name: time
+                  value: '2020-02-21 20:00:00'
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Концерт какой-то группы"
+              - column:
+                  name: description
+                  value: "Живая музыка, ламповая атмосфера"
+              - column:
+                  name: time
+                  value: '2020-02-25 20:00:00'
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "StandUp вечер"
+              - column:
+                  name: description
+                  value: "Много известных комиков"
+              - column:
+                  name: time
+                  value: '2020-02-28 20:00:00'
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: "Концерт какой-то группы"
+              - column:
+                  name: description
+                  value: "Живая музыка, ламповая атмосфера"
+              - column:
+                  name: time
+                  value: '2020-03-03 20:00:00'
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: "StandUp вечер"
+              - column:
+                  name: description
+                  value: "Много известных комиков"
+              - column:
+                  name: time
+                  value: '2020-03-06 20:00:00'
 
   - changeSet:
       id: create inventories table
       author: denis
       changes:
-      - createTable:
-          tableName: inventories
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: name
-              type: varchar(32)
-              constraints:
-                nullable: false
-          - column:
-              name: category
-              type: varchar(32)
-              constraints:
-                nullable: false
-          - column:
-              name: amount
-              type: INT
-              constraints:
-                nullable: false
+        - createTable:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: INT
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert into inventories table
       author: denis
       changes:
-      - insert:
-          tableName: inventories
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: name
-              value: "Рюмка 50 мл"
-          - column:
-              name: category
-              value: "glass"
-          - column:
-              name: amount
-              value: 23
-      - insert:
-          tableName: inventories
-          columns:
-          - column:
-              name: id
-              value: 2
-          - column:
-              name: name
-              value: "Стол"
-          - column:
-              name: category
-              value: "table"
-          - column:
-              name: amount
-              value: 3
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Рюмка 50 мл"
+              - column:
+                  name: category
+                  value: "glass"
+              - column:
+                  name: amount
+                  value: 45
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Стол"
+              - column:
+                  name: category
+                  value: "table"
+              - column:
+                  name: amount
+                  value: 15
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Бокал 500мл"
+              - column:
+                  name: category
+                  value: "glass"
+              - column:
+                  name: amount
+                  value: 20
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: "Баррель Zatecky Gus"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 10
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: "Баррель Kozel"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 10
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: "Баррель Heineken"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 3
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: "Виски Jim Beam 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 5
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: "Gold Rum 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 5
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: name
+                  value: "Silver Tequila 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 5
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: name
+                  value: "Tequila Sauza Silver 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 4
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: name
+                  value: "London Dry Gin 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 6
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: name
+                  value: "Самбука 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 6
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 13
+              - column:
+                  name: name
+                  value: "Ликер Blue Curacao 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 6
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 14
+              - column:
+                  name: name
+                  value: "Ликер Егермайстер 0,7л"
+              - column:
+                  name: category
+                  value: "alcohol"
+              - column:
+                  name: amount
+                  value: 6
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 15
+              - column:
+                  name: name
+                  value: "Томаты 1кг"
+              - column:
+                  name: category
+                  value: "food"
+              - column:
+                  name: amount
+                  value: 10
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 16
+              - column:
+                  name: name
+                  value: "Сыр моцарелла 1кг"
+              - column:
+                  name: category
+                  value: "food"
+              - column:
+                  name: amount
+                  value: 5
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 17
+              - column:
+                  name: name
+                  value: "Колбаса Пепперони"
+              - column:
+                  name: category
+                  value: "food"
+              - column:
+                  name: amount
+                  value: 5
+        - insert:
+            tableName: inventories
+            columns:
+              - column:
+                  name: id
+                  value: 18
+              - column:
+                  name: name
+                  value: "Куриное филе 1кг"
+              - column:
+                  name: category
+                  value: "food"
+              - column:
+                  name: amount
+                  value: 10
 
   - changeSet:
       id: create menu_items table
       author: denis
       changes:
-      - createTable:
-          tableName: menu_items
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: name
-              type: varchar(64)
-              constraints:
-                nullable: false
-          - column:
-              name: category
-              type: varchar(32)
-              constraints:
-                nullable: false
-          - column:
-              name: description
-              type: varchar(128)
-              constraints:
-                nullable: false
-          - column:
-              name: price
-              type: DECIMAL(8,2)
-              constraints:
-                nullable: false
+        - createTable:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: DECIMAL(8,2)
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert into menu_items
       author: denis
       changes:
-      - insert:
-          tableName: menu_items
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: name
-              value: "Zatecky Gus"
-          - column:
-              name: category
-              value: "beer"
-          - column:
-              name: description
-              value: "Светлый лагер с легким традиционным вкусом"
-          - column:
-              name: price
-              value: 5.00
-      - insert:
-          tableName: menu_items
-          columns:
-          - column:
-              name: id
-              value: 12
-          - column:
-              name: name
-              value: "Пепперони"
-          - column:
-              name: category
-              value: "pizza"
-          - column:
-              name: description
-              value: "Колбаска пепперони, сыр. Пицца 30см"
-          - column:
-              name: price
-              value: 15.00
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Zatecky Gus"
+              - column:
+                  name: category
+                  value: "beer"
+              - column:
+                  name: description
+                  value: "Светлый лагер с легким традиционным вкусом"
+              - column:
+                  name: price
+                  value: 5.00
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Kozel"
+              - column:
+                  name: category
+                  value: "beer"
+              - column:
+                  name: description
+                  value: "Светлый лагер с легким традиционным вкусом"
+              - column:
+                  name: price
+                  value: 5.00
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Heineken"
+              - column:
+                  name: category
+                  value: "beer"
+              - column:
+                  name: description
+                  value: "Светлый лагер с легким традиционным вкусом"
+              - column:
+                  name: price
+                  value: 5.00
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: "Виски Jim Beam"
+              - column:
+                  name: category
+                  value: "whisky"
+              - column:
+                  name: description
+                  value: "Американский бурбон, номер 1 по продажам в мире. обладает янтарным цветом и приятным ароматом с ванильными и цветочными оттенками."
+              - column:
+                  name: price
+                  value: 7.30
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: "Gold Rum"
+              - column:
+                  name: category
+                  value: "rum"
+              - column:
+                  name: description
+                  value: "Классический пряный ром, идеальная основа для коктейлей"
+              - column:
+                  name: price
+                  value: 4.40
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: "Silver Tequila"
+              - column:
+                  name: category
+                  value: "tequila"
+              - column:
+                  name: description
+                  value: "Традиционный мексиканский крепкоалкогольный напиток, приготовляемый из голубой агавы."
+              - column:
+                  name: price
+                  value: 5.50
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: "Tequila Sauza Silver"
+              - column:
+                  name: category
+                  value: "tequila"
+              - column:
+                  name: description
+                  value: "Традиционный мексиканский алкогольный напиток чистого и прозрачного цвета с нотками голубой агавы, дуба, перца и грейпфрута и терпким миндальным послевкусием."
+              - column:
+                  name: price
+                  value: 7.00
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: "London Dry Gin"
+              - column:
+                  name: category
+                  value: "gin"
+              - column:
+                  name: description
+                  value: "Традиционный джин, отличная основа для коктейлей."
+              - column:
+                  name: price
+                  value: 4.40
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: name
+                  value: "Самбука"
+              - column:
+                  name: category
+                  value: "sambuca"
+              - column:
+                  name: description
+                  value: "Популярный итальянский ликер на основе вытяжки из звездчатого аниса и бузины."
+              - column:
+                  name: price
+                  value: 5.90
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: name
+                  value: "Ликер Blue Curacao"
+              - column:
+                  name: category
+                  value: "liquor"
+              - column:
+                  name: description
+                  value: "Ликер голубого цвета на основе высушенных корок апельсинов особого сорта."
+              - column:
+                  name: price
+                  value: 6.60
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: name
+                  value: "Ликер Егермайстер"
+              - column:
+                  name: category
+                  value: "liquor"
+              - column:
+                  name: description
+                  value: "Известный немецкий травяной ликер. В его состав входит 56 натуральных компонентов, среди которых разнообразные травы, пряности, фрукты."
+              - column:
+                  name: price
+                  value: 7.30
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: name
+                  value: "Дисконтик"
+              - column:
+                  name: category
+                  value: "shots"
+              - column:
+                  name: description
+                  value: "Трехслойный коктейль с виски, вишневым сиропом и шампанским. Быстро и эффективно."
+              - column:
+                  name: price
+                  value: 2.60
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 13
+              - column:
+                  name: name
+                  value: "Отвертка шот"
+              - column:
+                  name: category
+                  value: "shots"
+              - column:
+                  name: description
+                  value: "Двухслойный коктейль на основе водки и апельсинного сока, для тех, кто не привык выдумывать сложных схем."
+              - column:
+                  name: price
+                  value: 2.60
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 14
+              - column:
+                  name: name
+                  value: "Лютый егерь"
+              - column:
+                  name: category
+                  value: "shots"
+              - column:
+                  name: description
+                  value: "Для любителей легендарного напитка Егермейстер с виски и вишневым послевкусием"
+              - column:
+                  name: price
+                  value: 4.80
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 15
+              - column:
+                  name: name
+                  value: "Рыжая собака"
+              - column:
+                  name: category
+                  value: "shots"
+              - column:
+                  name: description
+                  value: "Острый двухслойный коктейль из анисового ликера Самбука и серебряной текилы. Остроту коктейлю придает дэш соуса табаско."
+              - column:
+                  name: price
+                  value: 5.10
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 16
+              - column:
+                  name: name
+                  value: "Опухоль мозга"
+              - column:
+                  name: category
+                  value: "shots"
+              - column:
+                  name: description
+                  value: "Устрашающе красивый коктейль, приготовленный из сухого вермута, сливочного ликера, традиционной водки и сиропа гренадин."
+              - column:
+                  name: price
+                  value: 5.10
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 17
+              - column:
+                  name: name
+                  value: "Coca-Cola"
+              - column:
+                  name: category
+                  value: "lemonade"
+              - column:
+                  name: description
+                  value: "розлив, 0.2л"
+              - column:
+                  name: price
+                  value: 1.50
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 18
+              - column:
+                  name: name
+                  value: "Sprite"
+              - column:
+                  name: category
+                  value: "lemonade"
+              - column:
+                  name: description
+                  value: "розлив, 0.2л"
+              - column:
+                  name: price
+                  value: 1.50
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 19
+              - column:
+                  name: name
+                  value: "Schweppes"
+              - column:
+                  name: category
+                  value: "lemonade"
+              - column:
+                  name: description
+                  value: "розлив, 0.2л"
+              - column:
+                  name: price
+                  value: 1.50
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 20
+              - column:
+                  name: name
+                  value: "Сок апельсиновый"
+              - column:
+                  name: category
+                  value: "juice"
+              - column:
+                  name: description
+                  value: "0.2л"
+              - column:
+                  name: price
+                  value: 1.90
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 21
+              - column:
+                  name: name
+                  value: "Сок ананасовый"
+              - column:
+                  name: category
+                  value: "juice"
+              - column:
+                  name: description
+                  value: "0.2л"
+              - column:
+                  name: price
+                  value: 1.90
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 22
+              - column:
+                  name: name
+                  value: "Луковые кольца"
+              - column:
+                  name: category
+                  value: "snacks"
+              - column:
+                  name: description
+                  value: "Золотистые луковые колечки."
+              - column:
+                  name: price
+                  value: 2.90
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 23
+              - column:
+                  name: name
+                  value: "Гренки с чесноком"
+              - column:
+                  name: category
+                  value: "snacks"
+              - column:
+                  name: description
+                  value: "Обжаренные кусочки ржаного хлеба с чесноком"
+              - column:
+                  name: price
+                  value: 2.90
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 24
+              - column:
+                  name: name
+                  value: "Пицца Пепперони"
+              - column:
+                  name: category
+                  value: "pizza"
+              - column:
+                  name: description
+                  value: "Пицца на тонком тесте с острой колбаской пепперони и маслинами под сыром моцарелла."
+              - column:
+                  name: price
+                  value: 9.50
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 25
+              - column:
+                  name: name
+                  value: "Пицца Маргарита"
+              - column:
+                  name: category
+                  value: "pizza"
+              - column:
+                  name: description
+                  value: "Классическая пицца из сочных томатов и нежной моцареллы на тонком тесте."
+              - column:
+                  name: price
+                  value: 7.30
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 26
+              - column:
+                  name: name
+                  value: "Пицца гавайская"
+              - column:
+                  name: category
+                  value: "pizza"
+              - column:
+                  name: description
+                  value: "Пикантная пицца с нежной ветчиной и сладким ананасом под сыром моцарелла."
+              - column:
+                  name: price
+                  value: 9.50
+        - insert:
+            tableName: menu_items
+            columns:
+              - column:
+                  name: id
+                  value: 27
+              - column:
+                  name: name
+                  value: "Пицца с курицой и грибами"
+              - column:
+                  name: category
+                  value: "pizza"
+              - column:
+                  name: description
+                  value: "Пицца на тонком тесте с куриным филе и шампиньонами под сыром моцарелла."
+              - column:
+                  name: price
+                  value: 9.90
 
   - changeSet:
       id: create orders table
       author: denis
       changes:
-      - createTable:
-          tableName: orders
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: table_number
-              type: INT
-              constraints:
-                nullable: false
-          - column:
-              name: time_open
-              type: TIMESTAMP(2)
-              constraints:
-                nullable: false
-          - column:
-              name: time_close
-              type: TIMESTAMP(2)
-              constraints:
-                nullable: true
-
-  - changeSet:
-      id: insert into orders table
-      author: denis
-      changes:
-      - insert:
-          tableName: orders
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: table_number
-              value: 2
-          - column:
-              name: time_open
-              value: '2020-03-14 20:00:00'
-          - column:
-              name: time_close
-              value: null
-      - insert:
-          tableName: orders
-          columns:
-          - column:
-              name: id
-              value: 3
-          - column:
-              name: table_number
-              value: 2
-          - column:
-              name: time_open
-              value: '2020-01-14 20:00:00'
-          - column:
-              name: time_close
-              value: '2020-01-14 22:00:00'
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: table_number
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_open
+                  type: TIMESTAMP(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_close
+                  type: TIMESTAMP(2)
+                  constraints:
+                    nullable: true
 
   - changeSet:
       id: create order_choice table
       author: denis
       changes:
-      - createTable:
-          tableName: order_choice
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: order_id
-              type: INT
-              constraints:
-                nullable: false
-          - column:
-              name: menu_item_id
-              type: INT
-              constraints:
-                nullable: false
-          - column:
-              name: amount
-              type: INT
-              constraints:
-                nullable: false
-
-  - changeSet:
-      id: insert into order_choice table
-      author: denis
-      changes:
-      - insert:
-          tableName: order_choice
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: order_id
-              value: 1
-          - column:
-              name: menu_item_id
-              value: 1
-          - column:
-              name: amount
-              value: 5
-      - insert:
-          tableName: order_choice
-          columns:
-          - column:
-              name: id
-              value: 3
-          - column:
-              name: order_id
-              value: 3
-          - column:
-              name: menu_item_id
-              value: 1
-          - column:
-              name: amount
-              value: 5
+        - createTable:
+            tableName: order_choice
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: menu_item_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: INT
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: create reservations table
       author: denis
       changes:
-      - createTable:
-          tableName: reservations
-          columns:
-          - column:
-              name: id
-              type: INT
-              autoIncrement: true
-              constraints:
-                primaryKey: true
-                nullable: false
-          - column:
-              name: name
-              type: varchar(32)
-              constraints:
-                nullable: false
-          - column:
-              name: time
-              type: TIMESTAMP(2)
-              constraints:
-                nullable: false
-          - column:
-              name: table_number
-              type: INT
-              constraints:
-                nullable: false
-
-  - changeSet:
-      id: insert into reservations table
-      author: denis
-      changes:
-      - insert:
-          tableName: reservations
-          columns:
-          - column:
-              name: id
-              value: 1
-          - column:
-              name: name
-              value: "Денис"
-          - column:
-              name: time
-              value: '2020-03-04 19:00:00'
-          - column:
-              name: table_number
-              value: 2
+        - createTable:
+            tableName: reservations
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: TIMESTAMP(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: table_number
+                  type: INT
+                  constraints:
+                    nullable: false
