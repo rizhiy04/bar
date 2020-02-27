@@ -137,7 +137,10 @@ class EventControllerTest extends AbstractControllerTest {
 
         //when
         mockMvc.perform(delete("/events/1").header("Authorization", token))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"Such eventEntity doesn't exist\"\n" +
+                        "}"));
 
         verify(eventRepository, times(1)).findById(1);
         verify(eventRepository, times(0)).delete(any(EventEntity.class));

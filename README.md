@@ -90,6 +90,16 @@ Response: `201 CREATED`
 }
 ```
 
+Если пользователь с таким email уже существует, то будет вызвано:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "User already exist"
+}
+```
+
 ### B-2 Как "Клиент" я хочу войти в систему, и, если я зарегистрирован, вхожу.
 
 Request: 
@@ -111,11 +121,33 @@ Response: `200 OK`
 }
 ```
 
+Если пользователь не зарегистрирован в системе, то он получит ответ:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "No such username"
+}
+```
+
+Если пользователь не верно ввел пароль, то он получит сообщение:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "Wrong password"
+}
+```
+
 ### B-3 Как "Клиент" я хочу просмотреть информацию о своей карте клиента, и, если я зарегистрирован, то получаю информацию.
 
 Request: 
 
-`POST /bar/discount-cards`
+`GET /bar/discount-cards`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRAZ21haWwuY29tIiwiZXhwIjoxNTgyODY0MDg5LCJpYXQiOjE1ODI4MjgwODl9.-LJhLA1QUOCa0VBNOMVp9zcBZHuTgdcmz1KuvYyydj0`
 
 Response: `200 OK`
 
@@ -223,6 +255,8 @@ Request:
 
 `GET /bar/reservations`
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3YWl0ZXJAZ21haWwuY29tIiwiZXhwIjoxNTgyODY0NTkxLCJpYXQiOjE1ODI4Mjg1OTF9.wlezFhNAyFE4byQDz34ZlTkOZs7_YwUGxpDr3OYm_i0`
+
 Response: `200 OK`
 
 ```json
@@ -242,6 +276,8 @@ Request:
 
 `GET /bar/reservations/free/{hours}`
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3YWl0ZXJAZ21haWwuY29tIiwiZXhwIjoxNTgyODY0NTkxLCJpYXQiOjE1ODI4Mjg1OTF9.wlezFhNAyFE4byQDz34ZlTkOZs7_YwUGxpDr3OYm_i0`
+
 Response: `200 OK`
 
 ```json
@@ -255,6 +291,8 @@ Response: `200 OK`
 Request: 
 
 `POST /bar/orders`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3YWl0ZXJAZ21haWwuY29tIiwiZXhwIjoxNTgyODY0NTkxLCJpYXQiOjE1ODI4Mjg1OTF9.wlezFhNAyFE4byQDz34ZlTkOZs7_YwUGxpDr3OYm_i0`
 
 ```json
 {
@@ -277,6 +315,8 @@ Request:
 
 `PATCH /bar/orders`
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3YWl0ZXJAZ21haWwuY29tIiwiZXhwIjoxNTgyODY0NTkxLCJpYXQiOjE1ODI4Mjg1OTF9.wlezFhNAyFE4byQDz34ZlTkOZs7_YwUGxpDr3OYm_i0`
+
 ```json
 {
   "tableNumber" : 2,
@@ -297,6 +337,8 @@ Response: `200 OK`
 Request: 
 
 `GET /bar/inventories`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
 
 Response: `200 OK`
 
@@ -323,6 +365,8 @@ Request:
 
 `PATCH /bar/inventories`
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
+
 ```json
 {
   "id" : 1,
@@ -332,11 +376,23 @@ Request:
 
 Response: `200 OK`
 
+Если изменяемого инвентаря не существует, то будет вызвано:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "Such inventoryEntity doesn't exist"
+}
+```
+
 ### B-14 Как "Администратор" я хочу добавить новый инвентарь, и в результате добавляю.
 
 Request:
 
 `POST /bar/inventories`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
 
 ```json
 {
@@ -354,13 +410,27 @@ Request:
 
 `DELETE /bar/inventories/{inventoryId}`
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
+
 Response: `200 OK`
+
+Если удаляемого инвентаря не существует, то будет вызвано:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "Such inventoryEntity doesn't exist"
+}
+```
 
 ### B-16 Как "Администратор" я хочу добавить новое мероприятие, и в результате добавляю.
 
 Request: 
 
 `POST /bar/events`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
 
 ```json
 {
@@ -376,14 +446,27 @@ Response: `201 CREATED`
 
 Request: 
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
+
 `DELETE /bar/events/{eventId}`
 
-
 Response: `200 OK`
+
+Если удаляемого мероприятия не существует, то будет вызвано:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "Such eventEntity doesn't exist"
+}
+```
 
 ### B-18 Как "Администратор" я хочу добавлить новую позицию в меню, и в результате добавляю.
 
 Request: 
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
 
 `POST /bar/menu`
 
@@ -402,16 +485,29 @@ Response: `201 CREATED`
 
 Request: 
 
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
+
 `DELETE /bar/menu/{productId}`
 
 Response: `200 OK`
 
+Если удаляемой позиции не существует, то будет вызвано:
+
+Response: `400 Bad Request`
+
+```json
+{
+  "errorMessage" : "Such menuItem doesn't exist"
+}
+```
 
 ### B-20 Как "Администратор" я хочу просмотреть историю заказов, и в результате получаю её.
 
 Request: 
 
 `GET /bar/orders`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
 
 Response: `200 OK`
 
@@ -461,6 +557,8 @@ Response: `200 OK`
 Request: 
 
 `GET /bar/orders/revenue`
+
+`Headers: Authorization = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1ODI4NjQ5NzEsImlhdCI6MTU4MjgyODk3MX0.DYm_yrDwshxCL9O3YLFri9tf4ZeRHsgiRLOQLvbzVQ8`
 
 ```json
 {

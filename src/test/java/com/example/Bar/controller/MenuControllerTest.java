@@ -172,7 +172,10 @@ class MenuControllerTest extends AbstractControllerTest{
 
         //when
         mockMvc.perform(delete("/menu/1").header("Authorization", token))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"Such menuItem doesn't exist\"\n" +
+                        "}"));
 
         verify(menuItemRepository, times(1)).findByIdAndExistIsTrue(1);
         verify(menuItemRepository, times(0)).save(any(MenuItemEntity.class));

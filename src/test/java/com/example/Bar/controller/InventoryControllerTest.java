@@ -132,7 +132,10 @@ class InventoryControllerTest extends AbstractControllerTest{
                         "  \"id\" : 1,\n" +
                         "  \"count\" : 5\n" +
                         "}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"Such inventoryEntity doesn't exist\"\n" +
+                        "}"));
 
         verify(inventoryRepository, times(1)).findById(1);
         verify(inventoryRepository, times(0)).save(any(InventoryEntity.class));
@@ -233,7 +236,10 @@ class InventoryControllerTest extends AbstractControllerTest{
 
         //when
         mockMvc.perform(delete("/inventories/1").header("Authorization", token))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"Such inventoryEntity doesn't exist\"\n" +
+                        "}"));
 
         verify(inventoryRepository, times(1)).findById(1);
         verify(inventoryRepository, times(0)).delete(any(InventoryEntity.class));

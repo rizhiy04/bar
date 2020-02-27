@@ -13,6 +13,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AuthenticationControllerTest extends AbstractControllerTest{
@@ -51,7 +52,11 @@ class AuthenticationControllerTest extends AbstractControllerTest{
                         "  \"password\" : \"qwerty\",\n" +
                         "  \"name\" : \"Денис\"\n" +
                         "}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"User already exist\"\n" +
+                        "}"));
+
 
         verify(userRepository, times(1)).findByEmail(anyString());
     }
@@ -86,7 +91,10 @@ class AuthenticationControllerTest extends AbstractControllerTest{
                         "  \"email\" : \"client@gmail.com\",\n" +
                         "  \"password\" : \"qwerty\"\n" +
                         "}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"No such username\"\n" +
+                        "}"));
 
         verify(userRepository, times(1)).findByEmail(anyString());
     }
@@ -104,7 +112,10 @@ class AuthenticationControllerTest extends AbstractControllerTest{
                         "  \"email\" : \"client@gmail.com\",\n" +
                         "  \"password\" : \"qwerty12345\"\n" +
                         "}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\n" +
+                        "  \"errorMessage\" : \"Wrong password\"\n" +
+                        "}"));
 
         verify(userRepository, times(1)).findByEmail(anyString());
     }
