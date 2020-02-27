@@ -21,7 +21,7 @@ public class InventoryService {
     private final InventoryConverter inventoryConverter;
 
     public List<InventoryDTO> getInventories(){
-        return inventoryRepository.findAll().stream().map(inventoryConverter::convertToDTO)
+        return inventoryRepository.findAllByOrderByCategory().stream().map(inventoryConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 

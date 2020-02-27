@@ -624,6 +624,12 @@ databaseChangeLog:
                   type: DECIMAL(8,2)
                   constraints:
                     nullable: false
+              - column:
+                  name: exist
+                  type: boolean
+                  defaultValue: true
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert into menu_items

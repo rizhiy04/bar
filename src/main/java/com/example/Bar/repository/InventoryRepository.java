@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface InventoryRepository extends JpaRepository<InventoryEntity, Integer> {
 
-    List<InventoryEntity> findAllByCategory(String category);
+    List<InventoryEntity> findAllByOrderByCategory();
 
     Optional<InventoryEntity> findByCategory(String category);
 }

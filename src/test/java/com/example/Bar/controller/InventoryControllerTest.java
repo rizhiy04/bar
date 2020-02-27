@@ -25,7 +25,7 @@ class InventoryControllerTest extends AbstractControllerTest{
         //given
         final String token = signIn(Roles.ADMIN);
         final List<InventoryEntity> testInventoryEntities = getInventoryEntities();
-        given(inventoryRepository.findAll()).willReturn(testInventoryEntities);
+        given(inventoryRepository.findAllByOrderByCategory()).willReturn(testInventoryEntities);
 
         //when
         mockMvc.perform(get("/inventories").header("Authorization", token))
@@ -45,7 +45,7 @@ class InventoryControllerTest extends AbstractControllerTest{
                         "}\n" +
                         "]"));
 
-        verify(inventoryRepository, times(1)).findAll();
+        verify(inventoryRepository, times(1)).findAllByOrderByCategory();
     }
 
     @Test

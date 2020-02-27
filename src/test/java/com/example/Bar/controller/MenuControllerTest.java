@@ -27,7 +27,7 @@ class MenuControllerTest extends AbstractControllerTest{
     public void testGetMenuIsOk() throws Exception{
         //given
         final List<MenuItemEntity> testMenuItemEntities = getMenuItems();
-        given(menuItemRepository.findAll()).willReturn(testMenuItemEntities);
+        given(menuItemRepository.findAllByExistIsTrueOrderByCategory()).willReturn(testMenuItemEntities);
 
         //when
         mockMvc.perform(get("/menu"))
@@ -49,14 +49,14 @@ class MenuControllerTest extends AbstractControllerTest{
                         "}\n" +
                         "]"));
 
-        verify(menuItemRepository, times(1)).findAll();
+        verify(menuItemRepository, times(1)).findAllByExistIsTrueOrderByCategory();
     }
 
     @Test
     public void testGetMenuByCategoryIsOk() throws Exception{
         //given
         final List<MenuItemEntity> testMenuItemEntities = getMenuItems();
-        given(menuItemRepository.findAllByCategory("pizza"))
+        given(menuItemRepository.findAllByCategoryAndExistIsTrue("pizza"))
                 .willReturn(Collections.singletonList(testMenuItemEntities.get(1)));
 
         //when
@@ -64,7 +64,7 @@ class MenuControllerTest extends AbstractControllerTest{
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n"+
                         "{\n" +
-                        "  \"id\" : "+ testMenuItemEntities.get(1).getId() +",\n" +
+                        "  \"id\" : 12,\n" +
                         "  \"name\" : \"Пепперони\",\n" +
                         "  \"category\" : \"pizza\",\n" +
                         "  \"description\" : \"Колбаска пепперони, сыр. Пицца 30см\",\n" +
@@ -72,7 +72,7 @@ class MenuControllerTest extends AbstractControllerTest{
                         "}\n" +
                         "]"));
 
-        verify(menuItemRepository, times(1)).findAllByCategory("pizza");
+        verify(menuItemRepository, times(1)).findAllByCategoryAndExistIsTrue("pizza");
     }
 
     @Test
@@ -134,14 +134,14 @@ class MenuControllerTest extends AbstractControllerTest{
         //given
         final String token = signIn(Roles.ADMIN);
         final List<MenuItemEntity> testMenuItemEntities = getMenuItems();
-        given(menuItemRepository.findById(1)).willReturn(Optional.of(testMenuItemEntities.get(0)));
+        given(menuItemRepository.findByIdAndExistIsTrue(1)).willReturn(Optional.of(testMenuItemEntities.get(0)));
 
         //when
         mockMvc.perform(delete("/menu/1").header("Authorization", token))
                 .andExpect(status().isOk());
 
-        verify(menuItemRepository, times(1)).findById(1);
-        verify(menuItemRepository, times(1)).delete(any(MenuItemEntity.class));
+        verify(menuItemRepository, times(1)).findByIdAndExistIsTrue(1);
+        verify(menuItemRepository, times(1)).save(any(MenuItemEntity.class));
     }
 
     @Test
@@ -174,8 +174,8 @@ class MenuControllerTest extends AbstractControllerTest{
         mockMvc.perform(delete("/menu/1").header("Authorization", token))
                 .andExpect(status().isBadRequest());
 
-        verify(menuItemRepository, times(1)).findById(1);
-        verify(menuItemRepository, times(0)).delete(any(MenuItemEntity.class));
+        verify(menuItemRepository, times(1)).findByIdAndExistIsTrue(1);
+        verify(menuItemRepository, times(0)).save(any(MenuItemEntity.class));
 
     }
 

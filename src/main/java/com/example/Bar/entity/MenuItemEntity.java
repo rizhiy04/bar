@@ -2,6 +2,7 @@ package com.example.Bar.entity;
 
 
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,5 +24,7 @@ public class MenuItemEntity extends BaseEntity{
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "exist")
+    private Boolean exist = true;
 
 }

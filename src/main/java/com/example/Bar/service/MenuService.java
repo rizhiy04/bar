@@ -23,12 +23,12 @@ public class MenuService {
 
     @Cacheable("menu")
     public List<MenuItemDTO> getMenu() {
-        return menuItemRepository.findAll().stream().map(menuItemConverter::convertToDTO)
+        return menuItemRepository.findAllByExistIsTrueOrderByCategory().stream().map(menuItemConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public List<MenuItemDTO> getMenuByCategory(final String category) {
-        return menuItemRepository.findAllByCategory(category).stream().map(menuItemConverter::convertToDTO)
+        return menuItemRepository.findAllByCategoryAndExistIsTrue(category).stream().map(menuItemConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -39,10 +39,11 @@ public class MenuService {
 
     @CacheEvict(value = "menu", allEntries = true)
     public void deleteMenuItem(final Integer productId) throws BarNoSuchElementException {
-        final MenuItemEntity menuItemEntity = menuItemRepository.findById(productId)
+        final MenuItemEntity menuItemEntity = menuItemRepository.findByIdAndExistIsTrue(productId)
                 .orElseThrow(() -> new BarNoSuchElementException("Such menuItem doesn't exist"));
 
-        menuItemRepository.delete(menuItemEntity);
+        menuItemEntity.setExist(false);
+        menuItemRepository.save(menuItemEntity);
     }
 
 }
