@@ -7,6 +7,7 @@ services:
     - "8080:8080"
     depends_on:
       - mysqldb
+      - jenkins
 
   mysqldb:
     image: mysql:8
@@ -18,3 +19,11 @@ services:
     - MYSQL_DATABASE=bar
     volumes:
     - /opt/mysql/data:/var/lib/mysql
+
+  jenkins:
+    image: jenkins/jenkins:jdk11
+    ports:
+    - "8081:8080"
+    restart: on-failure
+    volumes:
+    - /opt/jenkins_home:/var/jenkins_home
