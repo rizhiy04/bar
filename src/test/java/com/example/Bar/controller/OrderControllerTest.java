@@ -116,7 +116,8 @@ class OrderControllerTest extends AbstractControllerTest{
                                 "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"25.00р.\"\n" +
+                        "  \"money\" : \"25.00\",\n" +
+                        "  \"currency\" : \"BYN\"\n" +
                         "}"));
     }
 
@@ -210,7 +211,8 @@ class OrderControllerTest extends AbstractControllerTest{
                         "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"25.00р\"\n" +
+                        "  \"money\" : \"25.00\",\n" +
+                        "  \"currency\" : \"BYN\"\n" +
                         "}"));
 
         verify(orderRepository, times(1)).save(any(OrderEntity.class));

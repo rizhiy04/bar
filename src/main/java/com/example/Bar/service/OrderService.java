@@ -6,6 +6,7 @@ import com.example.Bar.dto.order.*;
 import com.example.Bar.entity.OrderChoiceEntity;
 import com.example.Bar.entity.OrderEntity;
 import com.example.Bar.entity.UserDiscountCardEntity;
+import com.example.Bar.enumeration.Currency;
 import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.repository.OrderRepository;
 import com.example.Bar.repository.UserDiscountCardRepository;
@@ -34,16 +35,16 @@ public class OrderService {
         orderRepository.save(orderConverter.convertToEntity(makeNewOrderRequestDTO));
     }
 
-    public TextResponse getRevenueByTime(final RevenueRequest revenueRequest){
+    public MoneyResponse getRevenueByTime(final RevenueRequest revenueRequest){
         final BigDecimal price = orderRepository.findAllByTimeCloseAfter(revenueRequest.getDate()).stream()
                 .map(orderEntity -> calculateRevenue(orderEntity.getOrderChoiceEntities()))
                 .reduce(new BigDecimal(0), BigDecimal::add)
                 .setScale(2, RoundingMode.HALF_UP);
 
-        return new TextResponse(price + "р.");
+        return new MoneyResponse(price.toString(), Currency.BYN.name());
     }
 
-    public TextResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws BarNoSuchElementException {
+    public MoneyResponse closeOrder(final CloseOrderRequestDTO closeOrderRequestDTO) throws BarNoSuchElementException {
         final OrderEntity orderEntity = findOrderToClose(closeOrderRequestDTO);
         BigDecimal orderPrice = calculatePrice(orderEntity)
                 .setScale(2, RoundingMode.HALF_UP);
@@ -55,7 +56,7 @@ public class OrderService {
         orderEntity.setTimeClose(LocalDateTime.now());
         orderRepository.save(orderEntity);
 
-        return new TextResponse(orderPrice + "р");
+        return new MoneyResponse(orderPrice.toString(), Currency.BYN.name());
     }
 
     private BigDecimal calculateRevenue(final List<OrderChoiceEntity> orderChoiceEntities){

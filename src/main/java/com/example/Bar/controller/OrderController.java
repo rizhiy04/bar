@@ -1,10 +1,7 @@
 package com.example.Bar.controller;
 
 import com.example.Bar.dto.TextResponse;
-import com.example.Bar.dto.order.CloseOrderRequestDTO;
-import com.example.Bar.dto.order.MakeNewOrderRequestDTO;
-import com.example.Bar.dto.order.OrderDTO;
-import com.example.Bar.dto.order.RevenueRequest;
+import com.example.Bar.dto.order.*;
 import com.example.Bar.exception.BarNoSuchElementException;
 import com.example.Bar.service.OrderService;
 import io.swagger.annotations.*;
@@ -45,7 +42,7 @@ public class OrderController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse getRevenueByTime(@ApiParam(value = "Revenue data")
+    public MoneyResponse getRevenueByTime(@ApiParam(value = "Revenue data")
             @Valid @RequestBody final RevenueRequest revenueRequest){
         return orderService.getRevenueByTime(revenueRequest);
     }
@@ -73,7 +70,7 @@ public class OrderController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public TextResponse closeOrder(@ApiParam(value = "Close order data", required = true)
+    public MoneyResponse closeOrder(@ApiParam(value = "Close order data", required = true)
             @Valid @RequestBody final CloseOrderRequestDTO closeOrderRequestDTO) throws BarNoSuchElementException {
         return orderService.closeOrder(closeOrderRequestDTO);
     }

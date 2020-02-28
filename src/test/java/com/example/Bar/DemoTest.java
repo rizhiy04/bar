@@ -421,7 +421,8 @@ public class DemoTest {
                         "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"25.00р\"\n" +
+                        "  \"money\" : \"25.00\",\n" +
+                        "  \"currency\" : \"BYN\"\n" +
                         "}"));
     }
 
@@ -981,7 +982,8 @@ public class DemoTest {
                         "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "  \"response\" : \"25.00р.\"\n" +
+                        "  \"money\" : \"25.00\",\n" +
+                        "  \"currency\" : \"BYN\"\n" +
                         "}"));
     }
 }
