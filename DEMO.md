@@ -490,7 +490,8 @@ Response: `200 OK`
 
 ```json
 {
-  "response" : "25.00р"
+  "money" : "25.0",
+  "currency" : "BYN"
 }
 ```
 
@@ -932,7 +933,7 @@ Request:
 
 Response: `200 OK`
 
-### Как "Клиент" я хочу просмотреть все меню.
+### Как "Клиент" я хочу просмотреть все меню, после изменения.
 
 Request: 
 
@@ -1175,7 +1176,7 @@ Response: `200 OK`
       "id":1,
       "tableNumber":2,
       "timeOpen":"14-03-2020 20:00",
-      "timeClose": null,
+      "timeClose": "14-03-2020 21:00",
       "order":[ 
          { 
             "menuItem":{ 
@@ -1208,6 +1209,7 @@ Response: `200 OK`
 
 ```json
 {
-  "response" : "Выручка: 25.0р."
+  "money" : "25.0",
+  "currency" : "BYN"
 }
 ```
