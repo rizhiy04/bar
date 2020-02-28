@@ -328,7 +328,8 @@ Response: `200 OK`
 
 ```json
 {
-  "response" : "25.0р"
+  "money" : "25.0",
+  "currency" : "BYN"
 }
 ```
 
@@ -570,7 +571,8 @@ Response: `200 OK`
 
 ```json
 {
-  "response" : "25.0р."
+  "money" : "25.0",
+  "currency" : "BYN"
 }
 ```
 
