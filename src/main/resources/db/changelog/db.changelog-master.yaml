@@ -253,7 +253,7 @@ databaseChangeLog:
                   value: "Много известных комиков"
               - column:
                   name: time
-                  value: '2020-02-28 20:00:00'
+                  value: '2020-03-28 20:00:00'
         - insert:
             tableName: events
             columns:
@@ -268,7 +268,7 @@ databaseChangeLog:
                   value: "Живая музыка, ламповая атмосфера"
               - column:
                   name: time
-                  value: '2020-03-03 20:00:00'
+                  value: '2020-04-03 20:00:00'
         - insert:
             tableName: events
             columns:
@@ -283,7 +283,7 @@ databaseChangeLog:
                   value: "Много известных комиков"
               - column:
                   name: time
-                  value: '2020-03-06 20:00:00'
+                  value: '2020-04-06 20:00:00'
 
   - changeSet:
       id: create inventories table
